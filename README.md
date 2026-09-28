@@ -1,4 +1,4 @@
-# 网盘资源分享（slep-netdisk-share）
+# slepffxd · 网盘资源分享
 
 夸克网盘资源索引站。**纯静态单文件**：`index.html`（内含全部资源数据）+ 一个 logo，零构建、零依赖、零服务器费用。
 
@@ -27,7 +27,8 @@
 
 ## 部署（Cloudflare Pages）
 
-- 仓库：`slooppools/slep-netdisk-share`
+- 仓库：`slooppools/slepffxd`
+- Pages 项目名：`slepffxd`
 - Pages 项目：框架预设「无」、构建命令留空、输出目录 `/`
 - 无 Functions、无 KV、无环境变量依赖 —— 纯静态，部署即用
 
