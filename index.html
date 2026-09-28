@@ -1,0 +1,4025 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="u2z9ijL3P0AFgnDSkVfo0U">
+<head data-page-node-id="AQpR6uePnthmQkQSvlIDDI">
+<meta charset="UTF-8" data-page-node-id="52GT3XQru6DJGV4h78BOuQ">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="HuEAkaM0Bri1MGZK1W83gx">
+<title>网盘资源分享</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" data-page-node-id="MEiANTg0g6Xup84HHid408">
+<style>
+:root {
+    --bg: #f4f2ec; --card-bg: #ffffff; --accent: #b45309;
+    --accent-light: #fdf1e3; --text: #241f18; --text-dim: #7c7566;
+    --border: #e8e1d3; --shadow: 0 2px 12px rgba(180,83,9,0.07);
+    --shadow-hover: 0 8px 28px rgba(180,83,9,0.15);
+    --tag-bg: #f6efe0; --radius: 14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans SC', system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif; background: var(--bg); color: var(--text); }
+
+/* ── Header ── */
+.header {
+  position: sticky;
+  top: var(--nav-height, 37px);
+  z-index: 200;
+  background: rgba(244,242,236,0.94);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.logo-img {
+  height: 36px;
+  width: auto;
+  border-radius: 10px;
+  display: block;
+}
+
+.logo-text {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+/* ── Search ── */
+.search-wrap {
+  flex: 1;
+  min-width: 200px;
+  position: relative;
+}
+
+.search-wrap svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-dim);
+  pointer-events: none;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 10px 16px 10px 40px;
+  border: 1.5px solid var(--border);
+  border-radius: 9999px;
+  background: #fff;
+  color: var(--text);
+  font-size: 0.93rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+#searchInput:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(180,83,9,0.12);
+}
+
+#searchInput::placeholder {
+  color: #a0aec0;
+}
+
+/* ── Top Nav (一级) ── */
+.top-nav { position: sticky; top: 0; z-index: 210; background: #241f18; border-bottom: 1px solid #3d352a; }
+.top-nav-inner { max-width: 1440px; margin: 0 auto; padding: 6px 16px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.top-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 16px; border: 1.5px solid transparent; border-radius: 9999px;
+    background: transparent; color: #a09882; font-family: inherit;
+    font-size: .85rem; font-weight: 500; cursor: pointer; transition: all .2s;
+}
+.top-btn:hover { color: #f4f2ec; background: rgba(244,242,236,0.08); }
+.top-btn.active { color: #241f18; background: #dcb98a; font-weight: 700; border-color: #dcb98a; }
+.top-btn .badge { font-size: .7rem; background: rgba(220,185,138,0.2); color: #dcb98a; padding: 1px 6px; border-radius: 9999px; font-weight: 600; }
+.top-btn.active .badge { background: rgba(36,31,24,0.15); color: #241f18; }
+.top-btn.home-btn { text-decoration: none; color: #dcb98a; border-color: rgba(220,185,138,0.45); font-weight: 600; margin-right: 6px; }
+.top-btn.home-btn:hover { color: #241f18; background: #dcb98a; border-color: #dcb98a; }
+
+/* ── Sub Nav (二级) ── */
+.sub-nav { position: sticky; top: calc(var(--nav-height, 42px) + var(--header-height, 56px)); z-index: 195; background: var(--bg); border-bottom: 1px solid var(--border); }
+.sub-nav-inner { max-width: 1440px; margin: 0 auto; padding: 6px 16px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.sub-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 5px 12px; border: 1.5px solid var(--border); border-radius: 9999px;
+    background: transparent; color: var(--text-dim); font-family: inherit;
+    font-size: .8rem; font-weight: 500; cursor: pointer; transition: all .2s;
+}
+.sub-btn:hover { color: var(--accent); background: var(--accent-light); }
+.sub-btn.active { color: var(--accent); background: var(--accent-light); border-color: var(--accent); font-weight: 700; }
+.sub-btn .badge { font-size: .68rem; background: rgba(180,83,9,0.1); color: var(--accent); padding: 1px 5px; border-radius: 9999px; font-weight: 600; }
+
+/* ── Main ── */
+.main { max-width: 1440px; margin: 0 auto; padding: 20px 20px 60px; }
+.cat-section { margin-bottom: 24px; }
+.cat-section.hidden { display: none; }
+
+/* 二级色条标题 */
+.cat-heading { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; padding: 10px 14px; border-radius: 10px; }
+.cat-heading .cat-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+.cat-heading h2 { font-size: .95rem; font-weight: 700; }
+.cat-heading .cat-count { font-size: .75rem; color: var(--text-dim); background: var(--tag-bg); padding: 2px 8px; border-radius: 20px; }
+
+/* 三级灰色小标题 */
+.sub-heading { font-size: .82rem; font-weight: 600; color: var(--text-dim); margin: 14px 0 8px 4px; padding-left: 8px; border-left: 3px solid var(--border); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+.item {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 12px 14px; text-decoration: none; color: var(--text);
+    display: flex; align-items: center; gap: 10px;
+    transition: transform .22s, box-shadow .22s, border-color .22s;
+    box-shadow: var(--shadow);
+}
+.item:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: var(--accent); }
+.item-num { font-size: .7rem; font-weight: 700; color: #dcb98a; min-width: 26px; }
+.item-title { flex: 1; font-size: .85rem; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item-title .hl { background: rgba(180,83,9,0.15); color: var(--accent); border-radius: 3px; padding: 0 2px; }
+.item-arrow {
+    font-size: 1.05rem; color: #c9b48f; flex-shrink: 0; font-weight: 700; line-height: 1;
+    transition: color .2s, transform .2s;
+}
+.item:hover .item-arrow { color: var(--accent); transform: translateX(3px); }
+.bak-btn {
+    font-size: .7rem; padding: 3px 8px; border: 1px solid #dcc9a4; border-radius: 6px;
+    background: #fbf6ea; color: #a07a3c; cursor: pointer; font-family: inherit;
+    transition: all .2s; flex-shrink: 0;
+}
+.bak-btn:hover { background: #f3e7cd; color: #8a6425; border-color: #c9a76a; }
+
+.empty { text-align: center; padding: 80px 20px; color: var(--text-dim); display: none; }
+.empty.show { display: block; }
+
+/* toast */
+.toast {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    background: #241f18; color: #f4f2ec; padding: 10px 22px; border-radius: 10px;
+    font-size: .85rem; z-index: 999; opacity: 0; transition: opacity .3s;
+    pointer-events: none; box-shadow: 0 4px 20px rgba(0,0,0,.25);
+}
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body data-page-node-id="5J9A8fQOet8fnF5mGcvHMk">
+
+<div class="top-nav" data-page-node-id="MrNrZSzIm8JdfCyu2R2lqi"><div class="top-nav-inner" id="topNav" data-page-node-id="DgDat7x7dKCeQKSCLHwGWR"><a class="top-btn home-btn" href="https://link3.cc/slep" target="_blank" rel="noopener" data-home="1">🏠 首页</a></div></div>
+<header class="header" data-page-node-id="iUV9z3wYSvNGLX6fOIzy64">
+  <div class="header-inner" data-page-node-id="A6hlhAH3hoaPlCjcSftaQl">
+    <div class="logo" data-page-node-id="Tl0YKSa00KMAu6zoxNcS71">
+      <img src="SLEP FFXD-dt_compressed_.png" alt="logo" class="logo-img">
+      <span class="logo-text" data-page-node-id="VBgaICqxZZGC2OCH5lahOg">网盘资源分享</span>
+    </div>
+
+    <div class="search-wrap" data-page-node-id="U3r40sZoae04gTXpePUHfl">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="WM6Ha472xz7XdCwYW2t8JB">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+      <input id="searchInput" type="text" placeholder="搜索资源名称..." autocomplete="off" data-page-node-id="lFAHXJzwOPqHbZlsAjoGg3">
+    </div>
+  </div>
+</header>
+<div class="sub-nav" data-page-node-id="Gbm9SlDcnIwIeeEeACGepW"><div class="sub-nav-inner" id="subNav" data-page-node-id="agBn95mBZBYJEVtPHFv2Ua"></div></div>
+<main class="main" id="main" data-page-node-id="DDOqUmAuZRlkzBI166uxlz"></main>
+<div class="empty" id="empty" data-page-node-id="SO41wVQo8hPzp3LZjtptlU">没有找到匹配的资源</div>
+<div class="toast" id="toast" data-page-node-id="EDrE5l0AGCbMbPY1wnmIPr"></div>
+
+<script>
+const DATA = {
+ "100_文件资料": {
+  "title": "文件资料",
+  "categories": [
+   {
+    "name": "电子书库",
+    "children": [
+     {
+      "name": "原版/书库",
+      "items": [
+       {
+        "title": "清华大学·图书馆·必看书籍［精选］140.8G",
+        "link": "https://pan.quark.cn/s/92985dbbe42d",
+        "num": 1
+       },
+       {
+        "title": "Z_Library网站电子书库下载种子（约1800万册共10TB）含目录索引",
+        "link": "https://pan.quark.cn/s/d631175e7b22",
+        "num": 2
+       },
+       {
+        "title": "知轩藏书",
+        "link": "https://pan.quark.cn/s/89d3063a7878",
+        "num": 3
+       },
+       {
+        "title": "《亚马逊原版电子书》合集【AZW3】【60+GB】",
+        "link": "https://pan.quark.cn/s/4ab54b5dc491",
+        "num": 4
+       }
+      ]
+     },
+     {
+      "name": "名著/小说",
+      "items": [
+       {
+        "title": "725本世界名著(英汉双语)",
+        "link": "https://pan.quark.cn/s/4b846117b52a",
+        "num": 5
+       },
+       {
+        "title": "查理九世全集PDF",
+        "link": "https://pan.quark.cn/s/750ab1e03420",
+        "num": 6
+       },
+       {
+        "title": "豆瓣8.0以上高分，必看经典作品（全10册）",
+        "link": "https://pan.quark.cn/s/6d302d5bf44e",
+        "num": 7
+       },
+       {
+        "title": "小说合集分享",
+        "link": "https://pan.quark.cn/s/b1c545b77c39",
+        "num": 8
+       }
+      ]
+     },
+     {
+      "name": "国学/古籍",
+      "items": [
+       {
+        "title": "中华书局全本全注全译系列（54套国学经典）",
+        "link": "https://pan.quark.cn/s/993911eae89f",
+        "num": 9
+       },
+       {
+        "title": "真宗全书",
+        "link": "https://pan.quark.cn/s/e0cd7f22d42e",
+        "num": 10
+       },
+       {
+        "title": "【39】绝版古籍电子书合集（13大类）",
+        "link": "https://pan.quark.cn/s/0a6768e2f6fe",
+        "num": 11
+       }
+      ]
+     },
+     {
+      "name": "百科/工具书",
+      "items": [
+       {
+        "title": "【百科全书系列】46册",
+        "link": "https://pan.quark.cn/s/6fcc12eebaa6",
+        "num": 12
+       },
+       {
+        "title": "世界百科全书[国际中文版][全套20卷][PDF]",
+        "link": "https://pan.quark.cn/s/88c93cf9c2aa",
+        "num": 13
+       }
+      ]
+     },
+     {
+      "name": "其他",
+      "items": [
+       {
+        "title": "某宝购买986套电子字帖可打印",
+        "link": "https://pan.quark.cn/s/bf4a674f797e",
+        "num": 14
+       },
+       {
+        "title": "400套装书",
+        "link": "https://pan.quark.cn/s/c5f546ea6db1",
+        "num": 15
+       },
+       {
+        "title": "K肯N尼D迪-PDF",
+        "link": "https://pan.quark.cn/s/fe7b3f327b82",
+        "num": 16
+       },
+       {
+        "title": "性学观止：插图第6版（上下册）",
+        "link": "https://pan.quark.cn/s/944e4cc0b011",
+        "num": 17
+       },
+       {
+        "title": "📖《诺贝尔文学奖书单》",
+        "link": "https://pan.quark.cn/s/bacf107e6f66",
+        "num": 18
+       },
+       {
+        "title": "防身搏击术 (王斌，徐泽等编著, 王斌等编著 , 上海市教育委员会组编, 王斌, 徐泽, 武军).pdf",
+        "link": "https://pan.quark.cn/s/7ac3047f833e",
+        "num": 19
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "考试教育",
+    "children": [
+     {
+      "name": "公务员/考公",
+      "items": [
+       {
+        "title": "考公专区",
+        "link": "https://pan.quark.cn/s/53d36dc5e9c2",
+        "num": 20
+       }
+      ]
+     },
+     {
+      "name": "备考资料",
+      "items": [
+       {
+        "title": "四六级词汇（高清可打印）",
+        "link": "https://pan.quark.cn/s/0e33b03f32ee",
+        "num": 21
+       },
+       {
+        "title": "英语听力提高突破",
+        "link": "https://pan.quark.cn/s/3a11da1fc72b",
+        "num": 22
+       },
+       {
+        "title": "考研英语作文汇总",
+        "link": "https://pan.quark.cn/s/4ca8c2cfc7b1",
+        "num": 23
+       },
+       {
+        "title": "四六级备考超全合集",
+        "link": "https://pan.quark.cn/s/05d2ba1db6eb",
+        "num": 24
+       },
+       {
+        "title": "KO大魔王：英语语法通关计划-[B站]（完结）",
+        "link": "https://pan.quark.cn/s/68b96e7690bd",
+        "num": 25
+       },
+       {
+        "title": "孙志立简明音标50讲（完结）",
+        "link": "https://pan.quark.cn/s/582b1ecdf35a",
+        "num": 26
+       },
+       {
+        "title": "宋浩数学：2022专升本数学全程班（完结）",
+        "link": "https://pan.quark.cn/s/86d30312aa55",
+        "num": 27
+       },
+       {
+        "title": "上外顾悦教授：终极英语口语课（完结）",
+        "link": "https://pan.quark.cn/s/7131d6d90af4",
+        "num": 28
+       },
+       {
+        "title": "英语名师赖世雄的学习方法论（完结）",
+        "link": "https://pan.quark.cn/s/1251c116a658",
+        "num": 29
+       },
+       {
+        "title": "周邦琴英语思维训练营（完结）",
+        "link": "https://pan.quark.cn/s/fb6e1d159c7f",
+        "num": 30
+       }
+      ]
+     },
+     {
+      "name": "学历教育",
+      "items": [
+       {
+        "title": "大学专区",
+        "link": "https://pan.quark.cn/s/82e038d192cb",
+        "num": 31
+       },
+       {
+        "title": "高中专区",
+        "link": "https://pan.quark.cn/s/05284ac43942",
+        "num": 32
+       },
+       {
+        "title": "初中专区",
+        "link": "https://pan.quark.cn/s/5e9709fdfb68",
+        "num": 33
+       },
+       {
+        "title": "小学专区",
+        "link": "https://pan.quark.cn/s/a4f961df1f42",
+        "num": 34
+       }
+      ]
+     },
+     {
+      "name": "学霸笔记",
+      "items": [
+       {
+        "title": "衡水高考状元学霸笔记",
+        "link": "https://pan.quark.cn/s/35a3228fb7e9",
+        "num": 35
+       },
+       {
+        "title": "清华大学状元笔记(初高中)",
+        "link": "https://pan.quark.cn/s/43dd6e796438",
+        "num": 36
+       }
+      ]
+     },
+     {
+      "name": "少儿教育",
+      "items": [
+       {
+        "title": "亲子手工教学 (52节)",
+        "link": "https://pan.quark.cn/s/546e501afc73",
+        "num": 37
+       },
+       {
+        "title": "少儿教育学习资料大合集（1.13T）",
+        "link": "https://pan.quark.cn/s/fbf49e9b6868",
+        "num": 38
+       }
+      ]
+     },
+     {
+      "name": "政治/党建",
+      "items": [
+       {
+        "title": "入党题库资料包",
+        "link": "https://pan.quark.cn/s/f1fa1c7a77f5",
+        "num": 39
+       }
+      ]
+     },
+     {
+      "name": "教材/课本",
+      "items": [
+       {
+        "title": "各学科_小初高大学教材",
+        "link": "https://pan.quark.cn/s/28c90a2e9058",
+        "num": 40
+       }
+      ]
+     },
+     {
+      "name": "资格证考试",
+      "items": [
+       {
+        "title": "全国计算机等级考试",
+        "link": "https://pan.quark.cn/s/1c2434a0338c",
+        "num": 41
+       },
+       {
+        "title": "2025最新普通话考试资料合集",
+        "link": "https://pan.quark.cn/s/54f6433d6a1e",
+        "num": 42
+       },
+       {
+        "title": "全国导游证考试学习资料",
+        "link": "https://pan.quark.cn/s/c05350244d0f",
+        "num": 43
+       },
+       {
+        "title": "【公安】专业资料合集",
+        "link": "https://pan.quark.cn/s/733c61afa0ed",
+        "num": 44
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "学术资料",
+    "children": [
+     {
+      "name": "历史/人文",
+      "items": [
+       {
+        "title": "全国地方县志古籍收藏",
+        "link": "https://pan.quark.cn/s/4d991025b319",
+        "num": 45
+       },
+       {
+        "title": "钱学森力学手稿",
+        "link": "https://pan.quark.cn/s/bec3e07bc601",
+        "num": 46
+       },
+       {
+        "title": "中国历代官职表",
+        "link": "https://pan.quark.cn/s/750cfec04306",
+        "num": 47
+       },
+       {
+        "title": "二战特工技能手册 (英国特别行动委员会).pdf",
+        "link": "https://pan.quark.cn/s/28467327ae1d",
+        "num": 48
+       }
+      ]
+     },
+     {
+      "name": "思维/心理",
+      "items": [
+       {
+        "title": "经典心理学书籍333本",
+        "link": "https://pan.quark.cn/s/b8c94dcbf012",
+        "num": 49
+       },
+       {
+        "title": "逻辑习惯思维记忆集",
+        "link": "https://pan.quark.cn/s/79c448bd54b7",
+        "num": 50
+       },
+       {
+        "title": "思维认知书系（套装10册）",
+        "link": "https://pan.quark.cn/s/d6bdf7b5e4bb",
+        "num": 51
+       }
+      ]
+     },
+     {
+      "name": "计算机/编程",
+      "items": [
+       {
+        "title": "网安资料",
+        "link": "https://pan.quark.cn/s/5d2392167763",
+        "num": 52
+       },
+       {
+        "title": "60+编程语言学习书籍合集｜700+本PDF（C C++ Java Python全科+免费下载）",
+        "link": "https://pan.quark.cn/s/9ec2de279020",
+        "num": 53
+       },
+       {
+        "title": "计算机电子书",
+        "link": "https://pan.quark.cn/s/ca5c38db612a",
+        "num": 54
+       },
+       {
+        "title": "算法竞赛&ACM书籍大全",
+        "link": "https://pan.quark.cn/s/c7e682eb202a",
+        "num": 55
+       },
+       {
+        "title": "计算机408真题+解析-1",
+        "link": "https://pan.quark.cn/s/8cf3fa0bb513",
+        "num": 56
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "其他文档",
+    "children": [
+     {
+      "name": "AI工具/资料",
+      "items": [
+       {
+        "title": "央视力荐AI提效手册【豆包·即梦·剪映·飞书·扣子5合1实操指南】",
+        "link": "https://pan.quark.cn/s/8b559aaa9b77",
+        "num": 57
+       },
+       {
+        "title": "豆包AI赚钱手册",
+        "link": "https://pan.quark.cn/s/bb746e7cc8c4",
+        "num": 58
+       },
+       {
+        "title": "DeepSeek（先保存再下载以免下架）",
+        "link": "https://pan.quark.cn/s/aa305dfad8cf",
+        "num": 59
+       },
+       {
+        "title": "DeepSeek从入门到精通 汇总 大合集",
+        "link": "https://pan.quark.cn/s/9d1a485aeac7",
+        "num": 60
+       }
+      ]
+     },
+     {
+      "name": "写作/案例",
+      "items": [
+       {
+        "title": "创新创业挑战杯优秀案例",
+        "link": "https://pan.quark.cn/s/8777cdbbb47d",
+        "num": 61
+       },
+       {
+        "title": "付费短篇写作",
+        "link": "https://pan.quark.cn/s/b68c6b7770f8",
+        "num": 62
+       }
+      ]
+     },
+     {
+      "name": "合集资源",
+      "items": [
+       {
+        "title": "张雪峰资源（合集目前志愿相关最全）",
+        "link": "https://pan.quark.cn/s/dd00595ceca7",
+        "num": 63
+       },
+       {
+        "title": "精心整理近几年”知识星球附费文合集 800篇【PDF格式】",
+        "link": "https://pan.quark.cn/s/3e9b9311febf",
+        "num": 64
+       },
+       {
+        "title": "知识星球 付费课程（400篇）",
+        "link": "https://pan.quark.cn/s/7d9909b0a582",
+        "num": 65
+       }
+      ]
+     },
+     {
+      "name": "摄影/收藏",
+      "items": [
+       {
+        "title": "860本摄影书籍 涵盖全范围摄影知识",
+        "link": "https://pan.quark.cn/s/1af921d434b9",
+        "num": 66
+       },
+       {
+        "title": "人民币收藏与鉴赏PDF",
+        "link": "https://pan.quark.cn/s/f84d0020ab1c",
+        "num": 67
+       }
+      ]
+     },
+     {
+      "name": "剧本/文案",
+      "items": [
+       {
+        "title": "剧本杀剧本100套",
+        "link": "https://pan.quark.cn/s/8b76a98c72ed",
+        "num": 68
+       }
+      ]
+     },
+     {
+      "name": "合同/证书",
+      "items": [
+       {
+        "title": "900+份各行各业实用合同",
+        "link": "https://pan.quark.cn/s/a70a7fad0403",
+        "num": 69
+       },
+       {
+        "title": "荣誉证书模板",
+        "link": "https://pan.quark.cn/s/5ba9537a4634",
+        "num": 70
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "200_影视音漫": {
+  "title": "影视音漫",
+  "categories": [
+   {
+    "name": "音乐歌单",
+    "children": [
+     {
+      "name": "无损专辑",
+      "items": [
+       {
+        "title": "490张音乐专辑合集【无损音乐】",
+        "link": "https://pan.quark.cn/s/d26a0ce6af06",
+        "num": 1
+       },
+       {
+        "title": "【无损音乐】1737首经典流行歌曲-带目录",
+        "link": "https://pan.quark.cn/s/f3e792940e9c",
+        "num": 2
+       },
+       {
+        "title": "1400张无损音乐专辑合集【收藏版】",
+        "link": "https://pan.quark.cn/s/c7eb5517e4d0",
+        "num": 3
+       },
+       {
+        "title": "无损音乐合集（125套收藏版专辑）",
+        "link": "https://pan.quark.cn/s/3ab80b3ac4a1",
+        "num": 4
+       },
+       {
+        "title": "【无损FLAC格式】2024年1月19日发行新单曲",
+        "link": "https://pan.quark.cn/s/39bebb7a8446",
+        "num": 5
+       },
+       {
+        "title": "【无损FLAC格式】2024年5月3日发行新单曲",
+        "link": "https://pan.quark.cn/s/bd1d60a546ef",
+        "num": 6
+       }
+      ]
+     },
+     {
+      "name": "榜单/精选",
+      "items": [
+       {
+        "title": "2026最新歌曲",
+        "link": "https://pan.quark.cn/s/b036ff17ab1d",
+        "num": 7
+       },
+       {
+        "title": "［近期抖音热歌榜🎶］",
+        "link": "https://pan.quark.cn/s/cc941f55629c",
+        "num": 8
+       },
+       {
+        "title": "超大音乐合集，转存即听",
+        "link": "https://pan.quark.cn/s/d9a5c6e232ad",
+        "num": 9
+       },
+       {
+        "title": "356首付费绝版歌曲【转存即听】",
+        "link": "https://pan.quark.cn/s/b620de70e5f2",
+        "num": 10
+       },
+       {
+        "title": "1000首精选歌曲合集",
+        "link": "https://pan.quark.cn/s/93fef4ca7096",
+        "num": 11
+       },
+       {
+        "title": "2000-2020历年华语神曲",
+        "link": "https://pan.quark.cn/s/b32beed3d64a",
+        "num": 12
+       },
+       {
+        "title": "网易云评论最多的纯音乐TOP100",
+        "link": "https://pan.quark.cn/s/f6b857a637a3",
+        "backup": "https://pan.quark.cn/s/2f98201c8250",
+        "num": 13
+       },
+       {
+        "title": "网易云评论最多的英文TOP100",
+        "link": "https://pan.quark.cn/s/63bcd7e8f37d",
+        "num": 14
+       },
+       {
+        "title": "网易云评论最多的中文歌曲TOP50",
+        "link": "https://pan.quark.cn/s/43a2c021d1c7",
+        "num": 15
+       },
+       {
+        "title": "一人一首成名曲 100首",
+        "link": "https://pan.quark.cn/s/b0f49207cc11",
+        "num": 16
+       }
+      ]
+     },
+     {
+      "name": "歌手合集",
+      "items": [
+       {
+        "title": "【单依纯合集】 天使嗓音超治愈单依纯好歌大赏114首主唱&合唱歌曲编织治愈空灵，安静温柔的梦",
+        "link": "https://pan.quark.cn/s/3103390b1672",
+        "num": 17
+       },
+       {
+        "title": "周杰伦",
+        "link": "https://pan.quark.cn/s/7d02a740401e",
+        "num": 18
+       },
+       {
+        "title": "邓紫棋 合集",
+        "link": "https://pan.quark.cn/s/99056e2bb813",
+        "num": 19
+       },
+       {
+        "title": "张学友128张专辑",
+        "link": "https://pan.quark.cn/s/c11fd6b5e3c9",
+        "num": 20
+       },
+       {
+        "title": "任贤齐精选全纪录",
+        "link": "https://pan.quark.cn/s/9c325be7d4c9",
+        "num": 21
+       },
+       {
+        "title": "362首伍佰(1992-2020)个人流行单曲歌曲mp3",
+        "link": "https://pan.quark.cn/s/d3d5d06182e3",
+        "num": 22
+       },
+       {
+        "title": "[周杰伦音乐全集][出道至今全部歌曲无损FLAC+MP3+MV]",
+        "link": "https://pan.quark.cn/s/62ac41fa3223",
+        "num": 23
+       },
+       {
+        "title": "薛之谦【无损音乐合集】",
+        "link": "https://pan.quark.cn/s/0609aef0b364",
+        "num": 24
+       },
+       {
+        "title": "米津玄师歌曲合集",
+        "link": "https://pan.quark.cn/s/f0e74aedc6ae",
+        "num": 25
+       }
+      ]
+     },
+     {
+      "name": "纯音乐/氛围",
+      "items": [
+       {
+        "title": "1000首电影解说背景音乐·已分类",
+        "link": "https://pan.quark.cn/s/bf913aa17400",
+        "num": 26
+       },
+       {
+        "title": "十大最佳发烧女声",
+        "link": "https://pan.quark.cn/s/4f81fc116fa7",
+        "num": 27
+       },
+       {
+        "title": "【ACC】合集",
+        "link": "https://pan.quark.cn/s/18cd9a48adfa",
+        "num": 28
+       }
+      ]
+     },
+     {
+      "name": "经典老歌",
+      "items": [
+       {
+        "title": "60-90年代经典老歌1100首",
+        "link": "https://pan.quark.cn/s/1f81f8ac06d6",
+        "num": 29
+       },
+       {
+        "title": "90后经典流行歌曲570首",
+        "link": "https://pan.quark.cn/s/37fe43f74331",
+        "num": 30
+       },
+       {
+        "title": "90后流行曲合辑568首（收藏版MP3格式）",
+        "link": "https://pan.quark.cn/s/0b469a33f5b7",
+        "num": 31
+       },
+       {
+        "title": "经典老歌1679首【私藏】",
+        "link": "https://pan.quark.cn/s/3023041303a3",
+        "num": 32
+       },
+       {
+        "title": "经典粤语歌曲800首+",
+        "link": "https://pan.quark.cn/s/36c10ec30106",
+        "num": 33
+       }
+      ]
+     },
+     {
+      "name": "车载/场景音乐",
+      "items": [
+       {
+        "title": "车载音乐大合集",
+        "link": "https://pan.quark.cn/s/0a10c2b35e6e",
+        "num": 34
+       },
+       {
+        "title": "U盘车载专用 3068 首 24G",
+        "link": "https://pan.quark.cn/s/593d47aa34c9",
+        "num": 35
+       },
+       {
+        "title": "《歌单 华语佳作205首 让听歌成为享受》【FLAC】【7.3GB】",
+        "link": "https://pan.quark.cn/s/4e744fac71a0",
+        "num": 36
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "有声·音频",
+    "children": [
+     {
+      "name": "有声内容",
+      "items": [
+       {
+        "title": "G 丨诡-秘-之-主丨8082 丨多人有声剧丨西方奇幻克苏鲁【52】",
+        "link": "https://pan.quark.cn/s/4ac3ea896ef7",
+        "num": 37
+       }
+      ]
+     },
+     {
+      "name": "特殊音频",
+      "items": [
+       {
+        "title": "中国古风音效合集—226款古风武侠音乐",
+        "link": "https://pan.quark.cn/s/8349a8a5152a",
+        "num": 38
+       },
+       {
+        "title": "《睡眠白噪音》全套音频+文档",
+        "link": "https://pan.quark.cn/s/716d956cf373",
+        "num": 39
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "影视动漫",
+    "children": [
+     {
+      "name": "体育赛事",
+      "items": [
+       {
+        "title": "⚽世界杯1930年至2022年比赛全部资源【1.2TB】",
+        "link": "https://pan.quark.cn/s/80607ccac77a",
+        "num": 40
+       }
+      ]
+     },
+     {
+      "name": "演唱会",
+      "items": [
+       {
+        "title": "全球·明星演唱会·合集【珍藏版】🔥",
+        "link": "https://pan.quark.cn/s/5e18b26a8491",
+        "num": 41
+       }
+      ]
+     },
+     {
+      "name": "漫画库",
+      "items": [
+       {
+        "title": "漫画电子图书馆",
+        "link": "https://pan.quark.cn/s/94e3f91d0c3f",
+        "num": 42
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "300_教程课程": {
+  "title": "教程课程",
+  "categories": [
+   {
+    "name": "编程·IT",
+    "children": [
+     {
+      "name": "Python基础",
+      "items": [
+       {
+        "title": "3小时学会用Python处理Excel及各种自动化办公小案例",
+        "link": "https://pan.quark.cn/s/c1d6579fca0e",
+        "num": 1
+       },
+       {
+        "title": "黑马上海37期Python全套视频课程",
+        "link": "https://pan.quark.cn/s/b37a491f6a7c",
+        "num": 2
+       },
+       {
+        "title": "《2025最新版Python视频教程》",
+        "link": "https://pan.quark.cn/s/128b93c24c04",
+        "num": 3
+       },
+       {
+        "title": "《畅销3年的Python分布式爬虫课程》",
+        "link": "https://pan.quark.cn/s/1362bf8395e8",
+        "num": 4
+       },
+       {
+        "title": "Python400集大型视频 - 带源码课件",
+        "link": "https://pan.quark.cn/s/aae325befa19",
+        "num": 5
+       },
+       {
+        "title": "Python核心编程 15期 - 带课件",
+        "link": "https://pan.quark.cn/s/737019cd7f3c",
+        "num": 6
+       }
+      ]
+     },
+     {
+      "name": "Python进阶/爬虫",
+      "items": [
+       {
+        "title": "马哥教育《Python全栈+爬虫+数据+AI课程》",
+        "link": "https://pan.quark.cn/s/29149697037f",
+        "num": 7
+       },
+       {
+        "title": "码尚教育python全栈自动化VIP对标大厂标准",
+        "link": "https://pan.quark.cn/s/4bafafb16f13",
+        "num": 8
+       },
+       {
+        "title": "夜猫编程Python爬虫JS逆向进阶课",
+        "link": "https://pan.quark.cn/s/83d5e1aacec8",
+        "num": 9
+       },
+       {
+        "title": "爬虫开发+APP逆向超级大神班-02期 - 带源码课件",
+        "link": "https://pan.quark.cn/s/5b1342c68604",
+        "num": 10
+       },
+       {
+        "title": "青灯教育20个爬虫实战案例",
+        "link": "https://pan.quark.cn/s/540626f93735",
+        "num": 11
+       }
+      ]
+     },
+     {
+      "name": "其他语言/基础",
+      "items": [
+       {
+        "title": "C语言30小时高效通关课程",
+        "link": "https://pan.quark.cn/s/69731c8a8223",
+        "num": 12
+       },
+       {
+        "title": "极客时间-陶辉-Web协议详解与抓包实战",
+        "link": "https://pan.quark.cn/s/4b8a7533431c",
+        "num": 13
+       },
+       {
+        "title": "数据结构 速成课",
+        "link": "https://pan.quark.cn/s/8935f3357757",
+        "num": 14
+       },
+       {
+        "title": "【Hadoop】黑马-新版Hadoop课程",
+        "link": "https://pan.quark.cn/s/a837ba747f81",
+        "num": 15
+       },
+       {
+        "title": "Hadoop生态零基础课程",
+        "link": "https://pan.quark.cn/s/7e594fe098a7",
+        "num": 16
+       },
+       {
+        "title": "零基础入门Android(安卓)逆向",
+        "link": "https://pan.quark.cn/s/c5afa194d2e8",
+        "num": 17
+       },
+       {
+        "title": "Python操作三大主流数据库",
+        "link": "https://pan.quark.cn/s/ce630782bb51",
+        "num": 18
+       },
+       {
+        "title": "小白玩转Git_Github，全功能精讲 _ 技术爬爬虾",
+        "link": "https://pan.quark.cn/s/972e8b8488fb",
+        "num": 19
+       },
+       {
+        "title": "（新版）计算机基础，计算机组成原理+操作系统+网络",
+        "link": "https://pan.quark.cn/s/96dcd57fecef",
+        "num": 20
+       }
+      ]
+     },
+     {
+      "name": "其他",
+      "items": [
+       {
+        "title": "Java从入门到实战（完结）",
+        "link": "https://pan.quark.cn/s/77706cd71a1a",
+        "num": 21
+       },
+       {
+        "title": "Python零基础30天速通（小白定制版）（完结）",
+        "link": "https://pan.quark.cn/s/6d783e8a2abe",
+        "num": 22
+       },
+       {
+        "title": "Python小白也能听懂的入门课（完结）",
+        "link": "https://pan.quark.cn/s/03e594efeeed",
+        "num": 23
+       },
+       {
+        "title": "顶级互联网工程师的计算机思维课(完结)",
+        "link": "https://pan.quark.cn/s/605b1b8157db",
+        "num": 24
+       },
+       {
+        "title": "Web前端入门：从零开始做网站（完结）",
+        "link": "https://pan.quark.cn/s/28ba18d5b880",
+        "num": 25
+       },
+       {
+        "title": "次世代必备黑科技：创意编程指南（完结）",
+        "link": "https://pan.quark.cn/s/5b33e3a6a287",
+        "num": 26
+       },
+       {
+        "title": "轻松玩转Linux（完结）",
+        "link": "https://pan.quark.cn/s/1374c3629a33",
+        "num": 27
+       },
+       {
+        "title": "Python实战精讲：萌新系统入门（完结）",
+        "link": "https://pan.quark.cn/s/e854d58e7eb5",
+        "num": 28
+       },
+       {
+        "title": "算法面试通关40讲（完结）",
+        "link": "https://pan.quark.cn/s/a796af1d6c13",
+        "num": 29
+       },
+       {
+        "title": "耿直哥–深度学习必修课：进击算法工程师100节",
+        "link": "https://pan.quark.cn/s/6208a7942cca",
+        "num": 30
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "AI·办公",
+    "children": [
+     {
+      "name": "AI专题",
+      "items": [
+       {
+        "title": "AI专题领域",
+        "link": "https://pan.quark.cn/s/03d086d3cfd6",
+        "num": 31
+       },
+       {
+        "title": "【Midjourney】",
+        "link": "https://pan.quark.cn/s/d689feccebea",
+        "num": 32
+       }
+      ]
+     },
+     {
+      "name": "SPSS/统计分析",
+      "items": [
+       {
+        "title": "B战 - SPSS数据分析零基础实战课程（完结）",
+        "link": "https://pan.quark.cn/s/785b1514af05",
+        "num": 33
+       },
+       {
+        "title": "SPSS数据分析课｜论文数据处理+网易云课堂",
+        "link": "https://pan.quark.cn/s/9c0ba9efa09c",
+        "num": 34
+       },
+       {
+        "title": "SPSS问卷数据统计分析基础课程（完结）",
+        "link": "https://pan.quark.cn/s/fd22ac792dab",
+        "backup": "https://pan.quark.cn/s/f57b3b9dbfc2",
+        "num": 35
+       }
+      ]
+     },
+     {
+      "name": "工作流/自动化",
+      "items": [
+       {
+        "title": "100+COZE扣子工作流合集",
+        "link": "https://pan.quark.cn/s/8a4d66c5fde3",
+        "num": 36
+       },
+       {
+        "title": "工作流",
+        "link": "https://pan.quark.cn/s/df66015f3a88",
+        "num": 37
+       }
+      ]
+     },
+     {
+      "name": "工程类",
+      "items": [
+       {
+        "title": "工程力学 课程",
+        "link": "https://pan.quark.cn/s/efd9eb2a3dac",
+        "num": 38
+       }
+      ]
+     },
+     {
+      "name": "蓝桥杯",
+      "items": [
+       {
+        "title": "蓝桥杯省赛+无忧班合集",
+        "link": "https://pan.quark.cn/s/6c65a61a0d20",
+        "num": 39
+       }
+      ]
+     },
+     {
+      "name": "其他",
+      "items": [
+       {
+        "title": "SPSS数据分析零基础实战课程（完结）",
+        "link": "https://pan.quark.cn/s/87e53f1e0ef2",
+        "num": 40
+       },
+       {
+        "title": "6个万能公式搞定职场PPT（完结）",
+        "link": "https://pan.quark.cn/s/caf1fc5fbc19",
+        "num": 41
+       },
+       {
+        "title": "剪辑思维训练营（完结）",
+        "link": "https://pan.quark.cn/s/132bd3cf0c6a",
+        "num": 42
+       },
+       {
+        "title": "李兴兴：剪辑实战训练营（完结）",
+        "link": "https://pan.quark.cn/s/c0a38fb21c37",
+        "num": 43
+       },
+       {
+        "title": "C4D大作战：百万UP的光之教程（完结）",
+        "link": "https://pan.quark.cn/s/7a46fbe41a50",
+        "num": 44
+       },
+       {
+        "title": "野路子特效课：像P图一样“P”视频（完结）",
+        "link": "https://pan.quark.cn/s/69f7b088f0b0",
+        "num": 45
+       },
+       {
+        "title": "ps+ai双专业，设计师的第一门必修课（完结）",
+        "link": "https://pan.quark.cn/s/0fe4d00f2c27",
+        "num": 46
+       },
+       {
+        "title": "UI设计师的动效入门指南（完结）",
+        "link": "https://pan.quark.cn/s/01b7efb22384",
+        "num": 47
+       },
+       {
+        "title": "百万后期的进阶课（完结）",
+        "link": "https://pan.quark.cn/s/ca5e523b5d0c",
+        "num": 48
+       },
+       {
+        "title": "PR秘传技：进阶剪辑的全方位攻略（完结）",
+        "link": "https://pan.quark.cn/s/0a44bd6b13e1",
+        "num": 49
+       },
+       {
+        "title": "人像摄影后期系统化入门（完结）",
+        "link": "https://pan.quark.cn/s/1d98d4cbd8aa",
+        "num": 50
+       },
+       {
+        "title": "彭弘Red摄影零基础相机入门课程（完结）",
+        "link": "https://pan.quark.cn/s/92d3203e8e7c",
+        "num": 51
+       },
+       {
+        "title": "人像摄影实战训练营（完结）",
+        "link": "https://pan.quark.cn/s/2f73e8fed411",
+        "num": 52
+       },
+       {
+        "title": "陈老师 手机影像创作实战课程：从入门到精通（完结）",
+        "link": "https://pan.quark.cn/s/ab90e5db5152",
+        "num": 53
+       },
+       {
+        "title": "从0开始的PPT高手修神记（完结）",
+        "link": "https://pan.quark.cn/s/4fc80d65adc6",
+        "num": 54
+       },
+       {
+        "title": "大神教你玩转手机摄影，随手拍出好照片（完结）",
+        "link": "https://pan.quark.cn/s/3b31988d428b",
+        "num": 55
+       },
+       {
+        "title": "旁门左道八合一PPT一站式系统课程（完结）",
+        "link": "https://pan.quark.cn/s/082d14aeb3c0",
+        "num": 56
+       },
+       {
+        "title": "乔伯伯：5500词汇系统课（完结）",
+        "link": "https://pan.quark.cn/s/1d9e2bed2f9b",
+        "num": 57
+       },
+       {
+        "title": "野川社：平面基础视觉设计课（完结）",
+        "link": "https://pan.quark.cn/s/8e769cedb3e9",
+        "num": 58
+       },
+       {
+        "title": "当代经典摄影20讲：如何理解大师之作（完结）",
+        "link": "https://pan.quark.cn/s/588cab4abe15",
+        "num": 59
+       },
+       {
+        "title": "莫梦醒零基础也能学：多风格人像摄影系统课（完结）",
+        "link": "https://pan.quark.cn/s/ab19830bfabe",
+        "num": 60
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "AIGC专题",
+    "children": [
+     {
+      "name": "AI-Agent智能体",
+      "items": [
+       {
+        "title": "扣子Coze自动化工作流程教学30节",
+        "link": "https://pan.quark.cn/s/fc4d83250535",
+        "num": 61
+       },
+       {
+        "title": "Coze底层全案实操课程",
+        "link": "https://pan.quark.cn/s/5359ea4150c1",
+        "num": 62
+       },
+       {
+        "title": "2025AI大模型爆火agent",
+        "link": "https://pan.quark.cn/s/443c58716422",
+        "num": 63
+       },
+       {
+        "title": "OpenClaw龙虾AI资源",
+        "link": "https://pan.quark.cn/s/378fd55bb605",
+        "num": 64
+       },
+       {
+        "title": "央视力荐AI提效手册",
+        "link": "https://pan.quark.cn/s/54e6e6532fe2",
+        "num": 65
+       },
+       {
+        "title": "Coze零基础开发Agent智能体",
+        "link": "https://pan.quark.cn/s/8a2cd45990a3",
+        "num": 66
+       }
+      ]
+     },
+     {
+      "name": "AI对话与AI实战系列",
+      "items": [
+       {
+        "title": "最新AI指令合集",
+        "link": "https://pan.quark.cn/s/5a8e2d8b1ad3",
+        "num": 67
+       },
+       {
+        "title": "AI与ChatGPT相关教学课程大汇总",
+        "link": "https://pan.quark.cn/s/bb8e446eb7f5",
+        "num": 68
+       },
+       {
+        "title": "【豆包AI】",
+        "link": "https://pan.quark.cn/s/20d3d75385f4",
+        "num": 69
+       },
+       {
+        "title": "【ChatGPT】",
+        "link": "https://pan.quark.cn/s/18e74aff62f0",
+        "num": 70
+       },
+       {
+        "title": "零基础入门AI实战课",
+        "link": "https://pan.quark.cn/s/226bf357fe20",
+        "num": 71
+       },
+       {
+        "title": "【DeepSeek】",
+        "link": "https://pan.quark.cn/s/864861f844cc",
+        "num": 72
+       },
+       {
+        "title": "AI工具集.jpg",
+        "link": "https://pan.quark.cn/s/d6dde1a69216",
+        "num": 73
+       },
+       {
+        "title": "《AI图景解码50个年度关键词》PDF",
+        "link": "https://pan.quark.cn/s/a82ecbf4d5b7",
+        "num": 74
+       },
+       {
+        "title": "AI工具排行榜.jpg",
+        "link": "https://pan.quark.cn/s/03f17f1edaaa",
+        "num": 75
+       },
+       {
+        "title": "认识AIGC.pdf",
+        "link": "https://pan.quark.cn/s/08f2846fec51",
+        "num": 76
+       }
+      ]
+     },
+     {
+      "name": "AI换脸",
+      "items": [
+       {
+        "title": "AI本地换脸软件+教程",
+        "link": "https://pan.quark.cn/s/52ca583e91f1",
+        "num": 77
+       }
+      ]
+     },
+     {
+      "name": "AI文字识别（OCR）",
+      "items": [
+       {
+        "title": "DeepSeek-OCR-整合包",
+        "link": "https://pan.quark.cn/s/ce2b451b670f",
+        "num": 78
+       }
+      ]
+     },
+     {
+      "name": "AI机器人",
+      "items": [
+       {
+        "title": "微信接入AI机器人教程",
+        "link": "https://pan.quark.cn/s/08d61545bc33",
+        "num": 79
+       },
+       {
+        "title": "智元AI机器人灵犀X1开源资料",
+        "link": "https://pan.quark.cn/s/c232320ba7c1",
+        "num": 80
+       }
+      ]
+     },
+     {
+      "name": "AI绘画",
+      "items": [
+       {
+        "title": "【Midjourney】",
+        "link": "https://pan.quark.cn/s/c4cdb9b41622",
+        "num": 81
+       },
+       {
+        "title": "【StableDiffusion】",
+        "link": "https://pan.quark.cn/s/5ffc8a5645e7",
+        "num": 82
+       },
+       {
+        "title": "【Novel AI】",
+        "link": "https://pan.quark.cn/s/aea362056320",
+        "num": 83
+       },
+       {
+        "title": "【即梦AI】",
+        "link": "https://pan.quark.cn/s/a379321f6342",
+        "num": 84
+       },
+       {
+        "title": "【PS AI】",
+        "link": "https://pan.quark.cn/s/295d7815d3dc",
+        "num": 85
+       },
+       {
+        "title": "【AI进化社】AI绘画大师课",
+        "link": "https://pan.quark.cn/s/46b814d2aaef",
+        "num": 86
+       }
+      ]
+     },
+     {
+      "name": "AI视频",
+      "items": [
+       {
+        "title": "Seedance 2.0 学习资料包",
+        "link": "https://pan.quark.cn/s/7de23d2161d2",
+        "num": 87
+       },
+       {
+        "title": "【Sora资源最全合集】",
+        "link": "https://pan.quark.cn/s/d24fd84fbb46",
+        "num": 88
+       },
+       {
+        "title": "即梦Seedance 2.0创作漫剧",
+        "link": "https://pan.quark.cn/s/49c6463340af",
+        "num": 89
+       },
+       {
+        "title": "AI短视频制作一本通",
+        "link": "https://pan.quark.cn/s/2bfdf17dfec7",
+        "num": 90
+       },
+       {
+        "title": "AI生成爆款视频月入3W+",
+        "link": "https://pan.quark.cn/s/e259f1556599",
+        "num": 91
+       },
+       {
+        "title": "生活照制作好看的电子相册",
+        "link": "https://pan.quark.cn/s/668a8344b63a",
+        "num": 92
+       },
+       {
+        "title": "超强AI，一键制作短剧",
+        "link": "https://pan.quark.cn/s/d6ceeaf8f881",
+        "num": 93
+       },
+       {
+        "title": "AI治愈系漫画，轻松制作，一键达成，小白也能日入1000+",
+        "link": "https://pan.quark.cn/s/bb1b848c7804",
+        "num": 94
+       },
+       {
+        "title": "10万赞纯AI制作婚纱鱼治愈视频，斗鱼变现热门赛道来了",
+        "link": "https://pan.quark.cn/s/8d65791bec58",
+        "num": 95
+       },
+       {
+        "title": "AI制作山海经异兽变身视频，涨粉超快，流量大，附全套教程",
+        "link": "https://pan.quark.cn/s/f8e7f0d4e969",
+        "num": 96
+       },
+       {
+        "title": "ai原创治愈风景视频，引爆流量池，小白也能轻松上手，",
+        "link": "https://pan.quark.cn/s/db90b9d81177",
+        "num": 97
+       },
+       {
+        "title": "用AI制作穿越时空的画卷 把诗词画在中华大地",
+        "link": "https://pan.quark.cn/s/004a7fdcee47",
+        "num": 98
+       },
+       {
+        "title": "水滴音乐制作教程",
+        "link": "https://pan.quark.cn/s/93369d06a5f5",
+        "num": 99
+       },
+       {
+        "title": "AI音乐大师正席卷互联网，2分钟教会你吹拉弹唱",
+        "link": "https://pan.quark.cn/s/ca12b8760cc1",
+        "num": 100
+       },
+       {
+        "title": "2分钟教会你冰封万物冰雕AI视频制作方法",
+        "link": "https://pan.quark.cn/s/965ce4fff1eb",
+        "num": 101
+       }
+      ]
+     },
+     {
+      "name": "其他",
+      "items": [
+       {
+        "title": "小白也能听懂的人工智能原理（完结）",
+        "link": "https://pan.quark.cn/s/492e54342ec2",
+        "num": 102
+       },
+       {
+        "title": "图灵的猫：人人都能听懂的AI通识课-[B站]",
+        "link": "https://pan.quark.cn/s/10dab19e8141",
+        "num": 103
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "运营变现",
+    "children": [
+     {
+      "name": "平台课程合集",
+      "items": [
+       {
+        "title": "B站充电视频",
+        "link": "https://pan.quark.cn/s/d10d1ed467f1",
+        "num": 104
+       },
+       {
+        "title": "B站：付费课程大合集【精品资源】",
+        "link": "https://pan.quark.cn/s/ed106bed9d10",
+        "num": 105
+       },
+       {
+        "title": "付费资源💰2000+的口语星球精讲课程合集",
+        "link": "https://pan.quark.cn/s/07b7e92ce328",
+        "num": 106
+       },
+       {
+        "title": "2016-2024年合集《得到 全部健康课合集》《得到精品课》《得到训练营》《得到研修班》",
+        "link": "https://pan.quark.cn/s/b29a20d4e130",
+        "num": 107
+       },
+       {
+        "title": "🎧喜马拉雅付费音频课大合集（13个大类）在线可听",
+        "link": "https://pan.quark.cn/s/f87cec86aadd",
+        "num": 108
+       }
+      ]
+     },
+     {
+      "name": "知识付费/变现",
+      "items": [
+       {
+        "title": "新风口项目，公众号流量主托管，AI生成原创爆文",
+        "link": "https://pan.quark.cn/s/9753e80f1697",
+        "num": 109
+       },
+       {
+        "title": "知识付费年入30万训练营（1-7）合集",
+        "link": "https://pan.quark.cn/s/3a04d7964bd0",
+        "num": 110
+       },
+       {
+        "title": "《破局俱乐部》大航海计划：1499元年费最新内部资料合集",
+        "link": "https://pan.quark.cn/s/bcf2b8bf467d",
+        "num": 111
+       },
+       {
+        "title": "网课知识变现合集",
+        "link": "https://pan.quark.cn/s/45d4e02fc72c",
+        "num": 112
+       },
+       {
+        "title": "知识博主7天训练营",
+        "link": "https://pan.quark.cn/s/c1867534ee5e",
+        "num": 113
+       },
+       {
+        "title": "知识类主播落地课程",
+        "link": "https://pan.quark.cn/s/c5facc9deed7",
+        "num": 114
+       },
+       {
+        "title": "《直播间卖课话术设计》",
+        "link": "https://pan.quark.cn/s/698793e19c9e",
+        "num": 115
+       },
+       {
+        "title": "教育博主抖音运营",
+        "link": "https://pan.quark.cn/s/a275c5bbd435",
+        "num": 116
+       },
+       {
+        "title": "《网课赚钱术》",
+        "link": "https://pan.quark.cn/s/b929cdf2ff46",
+        "num": 117
+       },
+       {
+        "title": "爆款网课怎么做（完结）",
+        "link": "https://pan.quark.cn/s/46e007f275bb",
+        "num": 118
+       },
+       {
+        "title": "网课讲师必修课",
+        "link": "https://pan.quark.cn/s/17832df99a9e",
+        "num": 119
+       },
+       {
+        "title": "知识主播疯狂卖课",
+        "link": "https://pan.quark.cn/s/8240ff74daa9",
+        "num": 120
+       },
+       {
+        "title": "抖音卖课年入千万",
+        "link": "https://pan.quark.cn/s/28057f84917a",
+        "num": 121
+       },
+       {
+        "title": "十分钟教会你做课",
+        "link": "https://pan.quark.cn/s/e7dcda71d2d9",
+        "num": 122
+       },
+       {
+        "title": "疯狂卖课训练营",
+        "link": "https://pan.quark.cn/s/7cd3d0f86946",
+        "num": 123
+       },
+       {
+        "title": "教你做好课",
+        "link": "https://pan.quark.cn/s/fbf51f5fdc4e",
+        "num": 124
+       },
+       {
+        "title": "《学浪入驻卖课》",
+        "link": "https://pan.quark.cn/s/a1f8b62e0ca3",
+        "num": 125
+       },
+       {
+        "title": "《课程创造实战》",
+        "link": "https://pan.quark.cn/s/1ffeb0a5579d",
+        "num": 126
+       },
+       {
+        "title": "0网课制作开发项目合集",
+        "link": "https://pan.quark.cn/s/d67743f6406b",
+        "num": 127
+       },
+       {
+        "title": "做网课的细节",
+        "link": "https://pan.quark.cn/s/1f54f946b16e",
+        "num": 128
+       },
+       {
+        "title": "直播卖课快速变现",
+        "link": "https://pan.quark.cn/s/f54585241a94",
+        "num": 129
+       },
+       {
+        "title": "如何打造爆款课",
+        "link": "https://pan.quark.cn/s/dd988a840fc0",
+        "num": 130
+       },
+       {
+        "title": "做课实战方法",
+        "link": "https://pan.quark.cn/s/5b07a95979dc",
+        "num": 131
+       }
+      ]
+     },
+     {
+      "name": "其他",
+      "items": [
+       {
+        "title": "新手理财通关攻略——简七的13堂极简理财课（完结）",
+        "link": "https://pan.quark.cn/s/faac250a4a34",
+        "num": 132
+       },
+       {
+        "title": "现代社会秩序背后的科技商业史（更新中）",
+        "link": "https://pan.quark.cn/s/01beb355c745",
+        "num": 133
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "理财金融",
+    "children": [
+     {
+      "name": "其他",
+      "items": [
+       {
+        "title": "梨核财经：金融通识与商业分析法（完结）",
+        "link": "https://pan.quark.cn/s/b0e44b126e18",
+        "num": 134
+       },
+       {
+        "title": "随风说：金融的黑色现场（完结）",
+        "link": "https://pan.quark.cn/s/a6afd55911a7",
+        "num": 135
+       },
+       {
+        "title": "上海交大陆铭教授的经济学思维课（完结）",
+        "link": "https://pan.quark.cn/s/a2f2abea027f",
+        "num": 136
+       },
+       {
+        "title": "李国平教授：财务通识二十讲（完结）",
+        "link": "https://pan.quark.cn/s/59f642fc4972",
+        "num": 137
+       },
+       {
+        "title": "中国制造：一场未来十年的大博弈（完结）",
+        "link": "https://pan.quark.cn/s/87967f86eaa1",
+        "num": 138
+       },
+       {
+        "title": "翟东升：人民币汇率与人民币国际化（完结）",
+        "link": "https://pan.quark.cn/s/78bfe3cd99b7",
+        "num": 139
+       },
+       {
+        "title": "马红漫博士：用得上的行为经济学（完结）",
+        "link": "https://pan.quark.cn/s/6faea4f9b039",
+        "num": 140
+       },
+       {
+        "title": "黄江南教授讲世界经济变局：观念经济学（完结）",
+        "link": "https://pan.quark.cn/s/6513c25c438b",
+        "num": 141
+       },
+       {
+        "title": "年轻人的金融和商业分析课（完结）",
+        "link": "https://pan.quark.cn/s/e67c44b5301b",
+        "num": 142
+       },
+       {
+        "title": "金融学家王巍教授：金融可以创造历史（完结）",
+        "link": "https://pan.quark.cn/s/ec6232d6787c",
+        "num": 143
+       },
+       {
+        "title": "台湾大学苑举正教授的财经哲学课（完结）",
+        "link": "https://pan.quark.cn/s/69363b3d17bf",
+        "num": 144
+       },
+       {
+        "title": "南开大学张俊山教授讲《资本论》【完结】",
+        "link": "https://pan.quark.cn/s/3c3e3b9c6c21",
+        "num": 145
+       },
+       {
+        "title": "浙江大学蒋文华老师讲博弈论（完结）",
+        "link": "https://pan.quark.cn/s/dd3608a2fd1c",
+        "num": 146
+       },
+       {
+        "title": "清华大学靳卫萍老师：看懂宏观经济大势（完结）",
+        "link": "https://pan.quark.cn/s/b2e08d5766a2",
+        "num": 147
+       },
+       {
+        "title": "中美未来十年经济大博弈之20大推演-[B站]",
+        "link": "https://pan.quark.cn/s/31dd8dbdd8da",
+        "num": 148
+       },
+       {
+        "title": "珍大户认知世界的经济学155节【完结】",
+        "link": "https://pan.quark.cn/s/6b9b1dadb2d1",
+        "backup": "https://pan.quark.cn/s/efa9eb0ebf2b",
+        "num": 149
+       },
+       {
+        "title": "许准的政治经济学课：21世纪重读《资本论》",
+        "link": "https://pan.quark.cn/s/2f6247d32372",
+        "num": 150
+       },
+       {
+        "title": "柳行长：金融保险通识课-[B站]",
+        "link": "https://pan.quark.cn/s/b6b9b1524bc1",
+        "num": 151
+       },
+       {
+        "title": "清华大学靳卫萍老师：中国经济趋势分析",
+        "link": "https://pan.quark.cn/s/5a7b33056e68",
+        "num": 152
+       },
+       {
+        "title": "清华大学靳卫萍老师：经济学思维30讲-[B站]",
+        "link": "https://pan.quark.cn/s/74143ec01d60",
+        "num": 153
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "通识人文",
+    "children": [
+     {
+      "name": "心理/情感",
+      "items": [
+       {
+        "title": "姜振宇主讲MBTI性格分析（完结）",
+        "link": "https://pan.quark.cn/s/819c235fd0c8",
+        "num": 154
+       },
+       {
+        "title": "社交必备：幽默感养成课（完结）",
+        "link": "https://pan.quark.cn/s/c3e712700ca0",
+        "num": 155
+       },
+       {
+        "title": "一门给年轻人的恋爱成长课（完结）",
+        "link": "https://pan.quark.cn/s/84eff10ca0dd",
+        "num": 156
+       },
+       {
+        "title": "李银河的爱情课：中国青年的情感与婚姻（完结）",
+        "link": "https://pan.quark.cn/s/0ba532783136",
+        "num": 157
+       }
+      ]
+     },
+     {
+      "name": "其他",
+      "items": [
+       {
+        "title": "16堂宇宙课：北师大物理系赵峥教授（完结）",
+        "link": "https://pan.quark.cn/s/891adea09eac",
+        "num": 158
+       },
+       {
+        "title": "白宫里的主角们（完结）",
+        "link": "https://pan.quark.cn/s/ad4dc21103b1",
+        "num": 159
+       },
+       {
+        "title": "摆脱内耗的12个行动指南（完结）",
+        "link": "https://pan.quark.cn/s/4d4d0b7d7aa0",
+        "num": 160
+       },
+       {
+        "title": "林超：给年轻人的跨学科工具箱（完结）",
+        "link": "https://pan.quark.cn/s/69cad481ac15",
+        "num": 161
+       },
+       {
+        "title": "戴锦华大师电影课：性别与凝视（完结）",
+        "link": "https://pan.quark.cn/s/d4e9644d2677",
+        "backup": "https://pan.quark.cn/s/893dede3b18f",
+        "num": 162
+       },
+       {
+        "title": "互联网职业通识20讲（完结）",
+        "link": "https://pan.quark.cn/s/34834ee783d4",
+        "backup": "https://pan.quark.cn/s/8a8d412a1c7f",
+        "num": 163
+       },
+       {
+        "title": "提纲挈领读《红楼梦》(完结)",
+        "link": "https://pan.quark.cn/s/adca19127bff",
+        "num": 164
+       },
+       {
+        "title": "王昱珩：环球博物馆中的自然科学（完结）",
+        "link": "https://pan.quark.cn/s/91415f42e872",
+        "num": 165
+       },
+       {
+        "title": "马皑教授的社会学：人类的越轨行为研究（完结）",
+        "link": "https://pan.quark.cn/s/a9491aef42ca",
+        "num": 166
+       },
+       {
+        "title": "傅佩荣教授 拨开迷雾读国学(完结)",
+        "link": "https://pan.quark.cn/s/cf5bb8af20df",
+        "num": 167
+       },
+       {
+        "title": "王骁Albert：美国背面研究报告（完结）",
+        "link": "https://pan.quark.cn/s/3a2ff693c54a",
+        "num": 168
+       },
+       {
+        "title": "张绍忠 战忽知道五季合集（完结）",
+        "link": "https://pan.quark.cn/s/1e9d8f0ec8bc",
+        "num": 169
+       },
+       {
+        "title": "微表情心理课（完结）",
+        "link": "https://pan.quark.cn/s/506d80105b3c",
+        "num": 170
+       },
+       {
+        "title": "第四次工业革命来了-局座（完结）",
+        "link": "https://pan.quark.cn/s/f2d8203b21f0",
+        "num": 171
+       },
+       {
+        "title": "吴金闪教授：量子力学无基础入门（完结）",
+        "link": "https://pan.quark.cn/s/408603990fd0",
+        "num": 172
+       },
+       {
+        "title": "B站·北大钱理群教授讲鲁迅（完结）",
+        "link": "https://pan.quark.cn/s/a2f4869590b0",
+        "num": 173
+       },
+       {
+        "title": "金灿荣-进击的中国外交（完结）",
+        "link": "https://pan.quark.cn/s/f0fd44332d7b",
+        "num": 174
+       },
+       {
+        "title": "人类文明的地理密码（完结）",
+        "link": "https://pan.quark.cn/s/63dc526d1e25",
+        "num": 175
+       },
+       {
+        "title": "西方哲学课（完结）",
+        "link": "https://pan.quark.cn/s/69a52e7fdd15",
+        "num": 176
+       },
+       {
+        "title": "福尔摩斯的推理笔记（完结）",
+        "link": "https://pan.quark.cn/s/e59c3de1362f",
+        "num": 177
+       },
+       {
+        "title": "范勇鹏：美国的诞生--制度的起源与本质（完结）",
+        "link": "https://pan.quark.cn/s/f82de41e063b",
+        "num": 178
+       },
+       {
+        "title": "北大陈连山教授解读宝藏《山海经》（完结）",
+        "link": "https://pan.quark.cn/s/1e50d45f45b5",
+        "num": 179
+       },
+       {
+        "title": "方志远教授讲明史：明朝之亡（完结）",
+        "link": "https://pan.quark.cn/s/3300efd18bb2",
+        "num": 180
+       },
+       {
+        "title": "北大杨立华教授讲庄子哲学（完结）",
+        "link": "https://pan.quark.cn/s/36e8b9e30cdf",
+        "num": 181
+       },
+       {
+        "title": "李淼：三体中的物理学（完结）",
+        "link": "https://pan.quark.cn/s/3ce3dfc6ce83",
+        "num": 182
+       },
+       {
+        "title": "北大教授韩茂莉讲中国历史地理（完结）",
+        "link": "https://pan.quark.cn/s/884a895d692e",
+        "num": 183
+       },
+       {
+        "title": "包爱民教授：脑科学新知20讲（完结）",
+        "link": "https://pan.quark.cn/s/b28cf2e044db",
+        "num": 184
+       },
+       {
+        "title": "苑举正教授：哲学透镜看世界（完结）",
+        "link": "https://pan.quark.cn/s/4bdb907a94e0",
+        "num": 185
+       },
+       {
+        "title": "于赓哲：了不起的大唐文明史（完结）",
+        "link": "https://pan.quark.cn/s/c59b3968c75a",
+        "num": 186
+       },
+       {
+        "title": "打工人的法律必修课（完结）",
+        "link": "https://pan.quark.cn/s/d7d94cdaff2f",
+        "num": 187
+       },
+       {
+        "title": "潘妮妮-经典日漫的政治学分析（完结）",
+        "link": "https://pan.quark.cn/s/46a3748630ef",
+        "num": 188
+       },
+       {
+        "title": "北大陈平原：晚清画报中的近代中国（完结）",
+        "link": "https://pan.quark.cn/s/e9a45de875ae",
+        "num": 189
+       },
+       {
+        "title": "北宋之美：苏东坡的奇遇人生（完结）",
+        "link": "https://pan.quark.cn/s/f018192b94a5",
+        "num": 190
+       },
+       {
+        "title": "杜素娟的西方文学课：欧美经典名著解读（完结）",
+        "link": "https://pan.quark.cn/s/6f4ceba3c433",
+        "num": 191
+       },
+       {
+        "title": "同济陈家琪讲西方哲学：从康德到黑格尔（完结）",
+        "link": "https://pan.quark.cn/s/6c594f9817f5",
+        "num": 192
+       },
+       {
+        "title": "许倬云讲世界历史：五百年大变局（完结）",
+        "link": "https://pan.quark.cn/s/5039a6f92094",
+        "num": 193
+       },
+       {
+        "title": "于赓哲：历史上的利益分配（完结）",
+        "link": "https://pan.quark.cn/s/dc626e53a834",
+        "num": 194
+       },
+       {
+        "title": "考古大师课：文明、记忆与历史现场（完结）",
+        "link": "https://pan.quark.cn/s/93b18ef54de7",
+        "num": 195
+       },
+       {
+        "title": "王受之教授：世界现代设计通识课（完结）",
+        "link": "https://pan.quark.cn/s/07153521f89c",
+        "num": 196
+       },
+       {
+        "title": "中国政法大学刘建清教授：犯罪心理课（完结）",
+        "link": "https://pan.quark.cn/s/89b8d76148e0",
+        "num": 197
+       },
+       {
+        "title": "历史学者张宏杰：中西文明对比15讲（完结）",
+        "link": "https://pan.quark.cn/s/131637be9fb9",
+        "num": 198
+       },
+       {
+        "title": "从量子到宇宙：北师大赵峥教授的物理课（完结）",
+        "link": "https://pan.quark.cn/s/6245a907dc75",
+        "num": 199
+       },
+       {
+        "title": "柳肃教授讲中西建筑文化（完结）",
+        "link": "https://pan.quark.cn/s/6215c594883e",
+        "num": 200
+       },
+       {
+        "title": "人人都需要的自我管理课（完结）",
+        "link": "https://pan.quark.cn/s/c3cd9883a693",
+        "num": 201
+       },
+       {
+        "title": "人类文明闪耀时：郦波教授的最美唐诗12讲（完结）",
+        "link": "https://pan.quark.cn/s/65821c378fa0",
+        "num": 202
+       },
+       {
+        "title": "孙绍振教授：文学阅读审美课（完结）",
+        "link": "https://pan.quark.cn/s/da605284134e",
+        "num": 203
+       },
+       {
+        "title": "汪诘：科幻世界漫游指南（第一季）（完结）",
+        "link": "https://pan.quark.cn/s/35fd6b904892",
+        "num": 204
+       },
+       {
+        "title": "陈平的跨学科思维课（完结）",
+        "link": "https://pan.quark.cn/s/7d04fc26a5d8",
+        "num": 205
+       },
+       {
+        "title": "B站课程·关键对话20讲：如何成为沟通高手（完结）",
+        "link": "https://pan.quark.cn/s/05ea452ffa03",
+        "num": 206
+       },
+       {
+        "title": "陈嘉映教授：从哲学到人生（完结）",
+        "link": "https://pan.quark.cn/s/603454f99c15",
+        "num": 207
+       },
+       {
+        "title": "孟晖讲宋朝美学：看得见的大宋文明（完结）",
+        "link": "https://pan.quark.cn/s/c7927e0669f5",
+        "num": 208
+       },
+       {
+        "title": "超硬核沟通课：关于说话的一切（完结）",
+        "link": "https://pan.quark.cn/s/c1b075bc5b66",
+        "num": 209
+       },
+       {
+        "title": "中国文学的妖怪宇宙：马瑞芳讲志怪神魔小说（完结）",
+        "link": "https://pan.quark.cn/s/a6cc53ad2a5a",
+        "num": 210
+       },
+       {
+        "title": "戴建业的古典文学课：从曹操到陶渊明（完结）",
+        "link": "https://pan.quark.cn/s/1f997d95edae",
+        "num": 211
+       },
+       {
+        "title": "心理学通识与新知（完结）",
+        "link": "https://pan.quark.cn/s/2cd0482ba8eb",
+        "num": 212
+       },
+       {
+        "title": "偏见看政治：李筠教授的政治学课（完结）",
+        "link": "https://pan.quark.cn/s/238de96ecedb",
+        "num": 213
+       },
+       {
+        "title": "黄朴民教授：《孙子兵法》与兵家智慧（完结）",
+        "link": "https://pan.quark.cn/s/4dd42f17f648",
+        "num": 214
+       },
+       {
+        "title": "戴建业高能诗词课（完结）",
+        "link": "https://pan.quark.cn/s/6620853ffff5",
+        "num": 215
+       },
+       {
+        "title": "黄执中：成为懂情绪的高效沟通者（完结）",
+        "link": "https://pan.quark.cn/s/5988bd92ec3b",
+        "num": 216
+       },
+       {
+        "title": "戴建业精讲世说新语（完结）",
+        "link": "https://pan.quark.cn/s/4c1d4c05935b",
+        "num": 217
+       },
+       {
+        "title": "刁克利教授：莎士比亚戏剧10讲（完结）",
+        "link": "https://pan.quark.cn/s/17d7e5b6c5da",
+        "num": 218
+       },
+       {
+        "title": "于赓哲教授：大唐风华人物30讲（完结）",
+        "link": "https://pan.quark.cn/s/54c11b6b0688",
+        "num": 219
+       },
+       {
+        "title": "北师大曾祥龙：情绪自救课(含训练营)（完结）",
+        "link": "https://pan.quark.cn/s/bcfaa2389aca",
+        "num": 220
+       },
+       {
+        "title": "高盛元精读唐诗宋词（完结）",
+        "link": "https://pan.quark.cn/s/d8c0b57f5a6f",
+        "num": 221
+       },
+       {
+        "title": "洪兰脑科学课堂：大脑与生活（完结）",
+        "link": "https://pan.quark.cn/s/af89a5fd3820",
+        "num": 222
+       },
+       {
+        "title": "极速时代的个人竞争力（完结）",
+        "link": "https://pan.quark.cn/s/904ebc59cd9a",
+        "num": 223
+       },
+       {
+        "title": "姜振宇：微表情心里应用课（完结）",
+        "link": "https://pan.quark.cn/s/5c0ab22d75e6",
+        "num": 224
+       },
+       {
+        "title": "精准表达30讲：能成事儿的表达课（完结）",
+        "link": "https://pan.quark.cn/s/b8a03742f69e",
+        "num": 225
+       },
+       {
+        "title": "李凯教授精读《史记》（完结）",
+        "link": "https://pan.quark.cn/s/fee9ad4bf46c",
+        "num": 226
+       },
+       {
+        "title": "李永乐老师：从一到无穷大（完结）",
+        "link": "https://pan.quark.cn/s/e8cb9b08b967",
+        "num": 227
+       },
+       {
+        "title": "六层楼先生：女性健康通识课（完结）",
+        "link": "https://pan.quark.cn/s/96677c2a4a55",
+        "num": 228
+       },
+       {
+        "title": "罗翔：刑法悖论十讲（完结）",
+        "link": "https://pan.quark.cn/s/351bea0989ef",
+        "num": 229
+       },
+       {
+        "title": "孟庆延：经典社会学思想20讲（完结）",
+        "link": "https://pan.quark.cn/s/d1cbb7d9d350",
+        "num": 230
+       },
+       {
+        "title": "千秋兴亡：葛剑雄讲中国史（上下）（完结）",
+        "link": "https://pan.quark.cn/s/8c4915f72427",
+        "num": 231
+       },
+       {
+        "title": "人大吴征宇教授：现代国际秩序的变迁（完结）",
+        "link": "https://pan.quark.cn/s/6687da39930b",
+        "num": 232
+       },
+       {
+        "title": "申古博：中国传统壁画课25讲（完结）",
+        "link": "https://pan.quark.cn/s/80624adee1e5",
+        "num": 233
+       },
+       {
+        "title": "台湾大学孙中兴教授讲经典社会学（完结）",
+        "link": "https://pan.quark.cn/s/198f41d909ae",
+        "num": 234
+       },
+       {
+        "title": "杨宁老师的文学启示课（完结）",
+        "link": "https://pan.quark.cn/s/30fdd31fb11d",
+        "num": 235
+       },
+       {
+        "title": "中国美术学院吕澎：中国现代艺术史",
+        "link": "https://pan.quark.cn/s/83f3f2712cf2",
+        "num": 236
+       },
+       {
+        "title": "邵彦：中国古代绘画通识课（完结）",
+        "link": "https://pan.quark.cn/s/e6c07ec6eb18",
+        "num": 237
+       },
+       {
+        "title": "申一帆：学科提分攻略（完结）",
+        "link": "https://pan.quark.cn/s/dfad2dbfe926",
+        "num": 238
+       },
+       {
+        "title": "宋浩普林斯顿微积分读本(修订版)224节（完结）",
+        "link": "https://pan.quark.cn/s/4560f3792540",
+        "num": 239
+       },
+       {
+        "title": "Mai  2022说唱音乐大师课（完结）",
+        "link": "https://pan.quark.cn/s/29374a60a8ee",
+        "num": 240
+       },
+       {
+        "title": "度阴山讲阳明心学：教你修炼强大内心【完结】",
+        "link": "https://pan.quark.cn/s/7249bac7356c",
+        "num": 241
+       },
+       {
+        "title": "不刷题的吴姥姥：牛顿爱因斯坦的时空观（完结）",
+        "link": "https://pan.quark.cn/s/d598bd8b1b4d",
+        "num": 242
+       },
+       {
+        "title": "地下王朝：古猫讲中国墓葬史-[B站]【完结】",
+        "link": "https://pan.quark.cn/s/96b8e462ce11",
+        "num": 243
+       },
+       {
+        "title": "苑举正：从东西方文化冲突，看大国博弈",
+        "link": "https://pan.quark.cn/s/c8c273011fef",
+        "num": 244
+       },
+       {
+        "title": "被低估的王朝：隋朝改革的成与败（完结）",
+        "link": "https://pan.quark.cn/s/a3d10f145aac",
+        "num": 245
+       },
+       {
+        "title": "智慧与谋略：精讲《鬼谷子》",
+        "link": "https://pan.quark.cn/s/7ea57f9f3b35",
+        "num": 246
+       },
+       {
+        "title": "理性的惊悚：张志浩解读悬疑推理小说",
+        "link": "https://pan.quark.cn/s/2fbd70583af5",
+        "num": 247
+       },
+       {
+        "title": "人大毛立平教授：纵观清史二十讲（完结）",
+        "link": "https://pan.quark.cn/s/9e6f35b599f1",
+        "num": 248
+       },
+       {
+        "title": "鬼谷的生物演化课-[B站]",
+        "link": "https://pan.quark.cn/s/64fb4ccb8e4f",
+        "num": 249
+       },
+       {
+        "title": "刘擎哲学大师课（完结）",
+        "link": "https://pan.quark.cn/s/a5af4766c260",
+        "num": 250
+       },
+       {
+        "title": "拓展三倍人生：庆澄的电影权谋赏析课-[B站]",
+        "link": "https://pan.quark.cn/s/8ef0e747cd3e",
+        "num": 251
+       },
+       {
+        "title": "许倬云讲中国通史：五千年大格局-[B站]",
+        "link": "https://pan.quark.cn/s/7651f91a6147",
+        "num": 252
+       },
+       {
+        "title": "古典文学大师课：从《三国演义》到《金瓶梅》-[B站]",
+        "link": "https://pan.quark.cn/s/88a231525981",
+        "num": 253
+       },
+       {
+        "title": "王受之教授：世界建筑史（现代篇）完结36集",
+        "link": "https://pan.quark.cn/s/622961a79f69",
+        "num": 254
+       },
+       {
+        "title": "王受之教授：世界建筑文明史（古典篇）完结37集",
+        "link": "https://pan.quark.cn/s/7b8ff5c52eb7",
+        "num": 255
+       },
+       {
+        "title": "陈传席教授讲中国艺术史：从上古到南宋(完结)",
+        "link": "https://pan.quark.cn/s/2af4ae059b7e",
+        "num": 256
+       },
+       {
+        "title": "松明：玩转压力：积极情绪养成课【完结】",
+        "link": "https://pan.quark.cn/s/63ae9c053f72",
+        "num": 257
+       },
+       {
+        "title": "聂辉华教授：基层中国的运行逻辑-[B站]",
+        "link": "https://pan.quark.cn/s/4fddef39cdf4",
+        "num": 258
+       },
+       {
+        "title": "北大彭吉象教授：中国传统美学（完结）",
+        "link": "https://pan.quark.cn/s/feb3fc9f5263",
+        "num": 259
+       },
+       {
+        "title": "六神磊磊：跟着金庸学说话（完结）",
+        "link": "https://pan.quark.cn/s/a722f3df0a77",
+        "num": 260
+       },
+       {
+        "title": "费勇讲《金刚经》《心经》：教你断离一切烦恼更新中",
+        "link": "https://pan.quark.cn/s/045e79f54198",
+        "num": 261
+       },
+       {
+        "title": "央美叶剑青教授：中西方艺术的黄金时代(完结)",
+        "link": "https://pan.quark.cn/s/3da1610fd171",
+        "num": 262
+       },
+       {
+        "title": "朱老丝：让说话有“逻辑”（完结）",
+        "link": "https://pan.quark.cn/s/cd82fe988a25",
+        "num": 263
+       },
+       {
+        "title": "温铁军：去西方中心主义的话语建构-[B站]",
+        "link": "https://pan.quark.cn/s/8705b201e1da",
+        "num": 264
+       },
+       {
+        "title": "王一快：简单有趣的自我成长课堂",
+        "link": "https://pan.quark.cn/s/6062d5d16da7",
+        "num": 265
+       },
+       {
+        "title": "武汉大学赵林教授的西方哲学课 （完结）",
+        "link": "https://pan.quark.cn/s/25874e76146c",
+        "num": 266
+       },
+       {
+        "title": "生命的真相：王一方的北大医学人文课-[B站]",
+        "link": "https://pan.quark.cn/s/42fdffeba5e3",
+        "num": 267
+       },
+       {
+        "title": "北师大侯树栋教授：欧洲中世纪史-[B站]",
+        "link": "https://pan.quark.cn/s/dd6b3f71c349",
+        "num": 268
+       },
+       {
+        "title": "洪兰识人的艺术(混沌大学)",
+        "link": "https://pan.quark.cn/s/3d291ed82f27",
+        "num": 269
+       },
+       {
+        "title": "焦雄屏的电影课：世界电影20大名作赏析（完结）",
+        "link": "https://pan.quark.cn/s/4ababe4b1efb",
+        "num": 270
+       },
+       {
+        "title": "费俊峰教授：变态心理学20讲",
+        "link": "https://pan.quark.cn/s/c8ee5ea20765",
+        "num": 271
+       },
+       {
+        "title": "复旦徐英瑾教授：认知世界的20个哲学命题",
+        "link": "https://pan.quark.cn/s/f94068bc6241",
+        "num": 272
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "内容创作",
+    "children": [
+     {
+      "name": "摄影",
+      "items": [
+       {
+        "title": "【第一感受】影像创作社区-王建章的摄影课（完结）",
+        "link": "https://pan.quark.cn/s/24c85a967cd8",
+        "num": 273
+       },
+       {
+        "title": "「城市行者」旅行摄影实战课程 - 系统学习摄影从实战练习开始（完结）",
+        "link": "https://pan.quark.cn/s/949bd0439c80",
+        "num": 274
+       },
+       {
+        "title": "黄金时代的摄影50讲：如何理解大师之作（完结）",
+        "link": "https://pan.quark.cn/s/f5a5af91a1c3",
+        "num": 275
+       }
+      ]
+     },
+     {
+      "name": "其他",
+      "items": [
+       {
+        "title": "暴走漫画：讲故事也是一种超能力（完结）",
+        "link": "https://pan.quark.cn/s/c7035a64c4f9",
+        "num": 276
+       },
+       {
+        "title": "零基础上手Procreate（完结）",
+        "link": "https://pan.quark.cn/s/3ca036a7f61e",
+        "num": 277
+       },
+       {
+        "title": "人体绘画：从0开始角色创作（完结）",
+        "link": "https://pan.quark.cn/s/31931774002d",
+        "num": 278
+       },
+       {
+        "title": "人物速写：风格化角色创作实战（完结）",
+        "link": "https://pan.quark.cn/s/45842807bb7c",
+        "num": 279
+       },
+       {
+        "title": "白金游戏工作室：爆款游戏 创作心法（完结）",
+        "link": "https://pan.quark.cn/s/1c79fd84de42",
+        "num": 280
+       },
+       {
+        "title": "小说写作必修课：零基础打造写作IP（完结）",
+        "link": "https://pan.quark.cn/s/351068604f49",
+        "num": 281
+       },
+       {
+        "title": "多风格头像板绘入门（完结）",
+        "link": "https://pan.quark.cn/s/67743c838e0f",
+        "num": 282
+       },
+       {
+        "title": "今天开始画漫画：零基础入门到创作（完结）",
+        "link": "https://pan.quark.cn/s/da85018f19da",
+        "num": 283
+       },
+       {
+        "title": "大神同款定格动画保姆级教学（完结）",
+        "link": "https://pan.quark.cn/s/47c996af0d37",
+        "num": 284
+       },
+       {
+        "title": "AE超能力学院 - 小莫入门到精通（完结）",
+        "link": "https://pan.quark.cn/s/fbffcc8b6191",
+        "num": 285
+       },
+       {
+        "title": "一站式手绘色彩指南（完结）",
+        "link": "https://pan.quark.cn/s/bcdfed04602a",
+        "num": 286
+       },
+       {
+        "title": "张策的短视频创作课（完结）",
+        "link": "https://pan.quark.cn/s/c97ff3f6675a",
+        "num": 287
+       },
+       {
+        "title": "六斗米短视频脚本文案策划十三式（完结）",
+        "link": "https://pan.quark.cn/s/d3d6180f8105",
+        "num": 288
+       },
+       {
+        "title": "熊浩：论文求生12节（完结）",
+        "link": "https://pan.quark.cn/s/0537d6debe7c",
+        "num": 289
+       },
+       {
+        "title": "摄影后期调色：给摄影爱好者的色彩课",
+        "link": "https://pan.quark.cn/s/ba3b5be9109c",
+        "num": 290
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "生活技能",
+    "children": [
+     {
+      "name": "健身",
+      "items": [
+       {
+        "title": "《keep运动健身》合集 付费课+会员课",
+        "link": "https://pan.quark.cn/s/2bc57acf3c5e",
+        "num": 291
+       },
+       {
+        "title": "CoachFui：篮球核心力量技巧训练課程",
+        "link": "https://pan.quark.cn/s/a92004566059",
+        "num": 292
+       },
+       {
+        "title": "CoachFui：第二季篮球核心力量技巧训练課程",
+        "link": "https://pan.quark.cn/s/e2190f2b3436",
+        "num": 293
+       },
+       {
+        "title": "CoachFui：第二季新单动投篮训练课程",
+        "link": "https://pan.quark.cn/s/9523a252c56b",
+        "num": 294
+       },
+       {
+        "title": "CoachFui：第三季新单动投篮课【库里系列】",
+        "link": "https://pan.quark.cn/s/96cdadba60a2",
+        "num": 295
+       },
+       {
+        "title": "欧阳春晓：30天维密普拉提居家瘦身课",
+        "link": "https://pan.quark.cn/s/29f63b8229fb",
+        "num": 296
+       },
+       {
+        "title": "CBA10冠王训练师教你从0学篮球（完结）",
+        "link": "https://pan.quark.cn/s/8428cd496b1d",
+        "num": 297
+       },
+       {
+        "title": "范李猿：14天体态矫正计划｜上身篇（完结）",
+        "link": "https://pan.quark.cn/s/f4214a0e25ef",
+        "num": 298
+       },
+       {
+        "title": "零基础减脂塑性·男女适用（完结）",
+        "link": "https://pan.quark.cn/s/b6de794eff94",
+        "num": 299
+       },
+       {
+        "title": "卓叔增重：增肌饮食营养课（完结）",
+        "link": "https://pan.quark.cn/s/44ad06b05eef",
+        "num": 300
+       },
+       {
+        "title": "海洋饼干：21天纤细腰腹训练课（完结）",
+        "link": "https://pan.quark.cn/s/400cefec04bc",
+        "num": 301
+       },
+       {
+        "title": "卓叔增重：增肌入门教学课（完结）",
+        "link": "https://pan.quark.cn/s/d8d7e168c766",
+        "num": 302
+       },
+       {
+        "title": "欧阳春晓：28天根本性减脂课程（完结）",
+        "link": "https://pan.quark.cn/s/9ca714f09a70",
+        "num": 303
+       },
+       {
+        "title": "28天增肌减脂，居家打造黄金比例身材（完结）",
+        "link": "https://pan.quark.cn/s/6dc4b429d47d",
+        "num": 304
+       },
+       {
+        "title": "闫帅奇·28天极速减脂计划（完结）",
+        "link": "https://pan.quark.cn/s/6c39aaacbce6",
+        "num": 305
+       },
+       {
+        "title": "街舞（爵士舞）基本功打卡课_谭老师（完结）",
+        "link": "https://pan.quark.cn/s/abd2df4faaf9",
+        "num": 306
+       },
+       {
+        "title": "Pro Shot：15天三分完全指南（完结）",
+        "link": "https://pan.quark.cn/s/e7c15871d536",
+        "num": 307
+       },
+       {
+        "title": "卓叔增重：12周家庭增肌循环计划【完结】",
+        "link": "https://pan.quark.cn/s/e15a8d319020",
+        "num": 308
+       },
+       {
+        "title": "欧阳春晓：18天体态矫正·腰臀比雕刻（完结）",
+        "link": "https://pan.quark.cn/s/cf71c8e65128",
+        "num": 309
+       },
+       {
+        "title": "闫帅奇女性马甲线打造减脂瘦肚子方案（完结）",
+        "link": "https://pan.quark.cn/s/ecd6a5e5b1c2",
+        "num": 310
+       },
+       {
+        "title": "闫帅奇：男性腹肌打造瘦肚子全方案（完结）",
+        "link": "https://pan.quark.cn/s/62893044af6d",
+        "num": 311
+       },
+       {
+        "title": "范李猿：14天体态矫正计划【下身篇】（完结）",
+        "link": "https://pan.quark.cn/s/c0bb7df427bf",
+        "num": 312
+       }
+      ]
+     },
+     {
+      "name": "学习方法",
+      "items": [
+       {
+        "title": "记忆大师卢菲菲：25个窍门让你“过目不忘”",
+        "link": "https://pan.quark.cn/s/2e24fe8d6065",
+        "num": 313
+       }
+      ]
+     },
+     {
+      "name": "烹饪",
+      "items": [
+       {
+        "title": "中国八大菜系视频课（800道菜品）",
+        "link": "https://pan.quark.cn/s/af70709caee1",
+        "num": 314
+       },
+       {
+        "title": "黎叔家常川菜私教课（完结）",
+        "link": "https://pan.quark.cn/s/61df478e986a",
+        "num": 315
+       }
+      ]
+     },
+     {
+      "name": "其他",
+      "items": [
+       {
+        "title": "零基础入门学唱歌（完结）",
+        "link": "https://pan.quark.cn/s/dcf1fb56a697",
+        "num": 316
+       },
+       {
+        "title": "人人都能唱出好歌声（完结）",
+        "link": "https://pan.quark.cn/s/fc40c518713b",
+        "num": 317
+       },
+       {
+        "title": "12堂教你学唱歌（完结）",
+        "link": "https://pan.quark.cn/s/b8cef1453d8e",
+        "num": 318
+       },
+       {
+        "title": "全能音乐人入门训练营：零基础学写歌（完结）",
+        "link": "https://pan.quark.cn/s/25795990c7cf",
+        "num": 319
+       },
+       {
+        "title": "Tiger谭秋娟的吉他弹唱入门课（完结）",
+        "link": "https://pan.quark.cn/s/b737dd95a765",
+        "num": 320
+       },
+       {
+        "title": "程龙老师：尤克里里基础入门课（完结）",
+        "link": "https://pan.quark.cn/s/070e690bf955",
+        "num": 321
+       },
+       {
+        "title": "流行唱法6讲（完结）",
+        "link": "https://pan.quark.cn/s/83f3903f6808",
+        "num": 322
+       },
+       {
+        "title": "毛戈平美妆学院：生活妆容课（完结）",
+        "link": "https://pan.quark.cn/s/c0ff0f6f8f7c",
+        "num": 323
+       },
+       {
+        "title": "毛戈平美妆学院：小白零基础入门课（完结）",
+        "link": "https://pan.quark.cn/s/5ae08e14a80b",
+        "num": 324
+       },
+       {
+        "title": "方锦龙国乐通识课（完结）",
+        "link": "https://pan.quark.cn/s/496245a54862",
+        "num": 325
+       },
+       {
+        "title": "胡sir吉他综合教程：入门到即兴（完结）",
+        "link": "https://pan.quark.cn/s/9a0e3358f8ea",
+        "num": 326
+       },
+       {
+        "title": "V叔的钢琴基础入门课（完结）",
+        "link": "https://pan.quark.cn/s/9db6aa85e499",
+        "num": 327
+       },
+       {
+        "title": "胖雪人的声音魔法课（完结）",
+        "link": "https://pan.quark.cn/s/5769ff9b0184",
+        "num": 328
+       },
+       {
+        "title": "王者荣耀：萌新射手如何冲击传奇王者（完结）",
+        "link": "https://pan.quark.cn/s/80b07a952413",
+        "num": 329
+       },
+       {
+        "title": "奇妙流行声乐课堂：从零开始学唱歌",
+        "link": "https://pan.quark.cn/s/2c23c8e5ac01",
+        "num": 330
+       },
+       {
+        "title": "刘谦第一课！零基础魔术教学(完结)",
+        "link": "https://pan.quark.cn/s/3f486e5f4c6b",
+        "num": 331
+       },
+       {
+        "title": "熊伟零基础书法入门课（完结）",
+        "link": "https://pan.quark.cn/s/25e452b54cec",
+        "num": 332
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "400_游戏资源": {
+  "title": "游戏资源",
+  "categories": [
+   {
+    "name": "游戏合集",
+    "children": [
+     {
+      "name": "系列合集",
+      "items": [
+       {
+        "title": "刺客信条系列合集",
+        "link": "https://pan.quark.cn/s/867f6196cb01",
+        "num": 1
+       },
+       {
+        "title": "孤岛惊魂游戏合集",
+        "link": "https://pan.quark.cn/s/d678ef8ea3b0",
+        "num": 2
+       },
+       {
+        "title": "古墓丽影合集",
+        "link": "https://pan.quark.cn/s/c5f23dbdf987",
+        "num": 3
+       },
+       {
+        "title": "红色警戒游戏合集",
+        "link": "https://pan.quark.cn/s/b8dc25004a7e",
+        "num": 4
+       },
+       {
+        "title": "荒野大镖客合集",
+        "link": "https://pan.quark.cn/s/26d999e24fd4",
+        "num": 5
+       },
+       {
+        "title": "极品飞车游戏合集",
+        "link": "https://pan.quark.cn/s/f4daa85057a3",
+        "num": 6
+       },
+       {
+        "title": "生化危机游戏合集",
+        "link": "https://pan.quark.cn/s/8e0a03634116",
+        "num": 7
+       }
+      ]
+     },
+     {
+      "name": "常规合集",
+      "items": [
+       {
+        "title": "6月NS游戏合集",
+        "link": "https://pan.quark.cn/s/8b3b56547780",
+        "num": 8
+       },
+       {
+        "title": "980款Steam移植手机游戏版大合集",
+        "link": "https://pan.quark.cn/s/087ec94c5318",
+        "num": 9
+       },
+       {
+        "title": "棒子国真人互动游戏合集",
+        "link": "https://pan.quark.cn/s/d0b9fb5004b7",
+        "num": 10
+       },
+       {
+        "title": "畅玩-合集",
+        "link": "https://pan.quark.cn/s/c07ad4444f70",
+        "num": 11
+       },
+       {
+        "title": "大型单机暗黑刷宝专题",
+        "link": "https://pan.quark.cn/s/c2c376aee8ff",
+        "num": 12
+       },
+       {
+        "title": "ios手游合集",
+        "link": "https://pan.quark.cn/s/792c01b3c829",
+        "num": 13
+       },
+       {
+        "title": "街机游戏合集",
+        "link": "https://pan.quark.cn/s/1564257a7e3f",
+        "num": 14
+       },
+       {
+        "title": "Steam完美移植游戏合集",
+        "link": "https://pan.quark.cn/s/0b6af0a2358c",
+        "num": 15
+       },
+       {
+        "title": "手游推荐合集",
+        "link": "https://pan.quark.cn/s/45095707d0b6",
+        "num": 16
+       },
+       {
+        "title": "热门系列⭐⭐⭐",
+        "link": "https://pan.quark.cn/s/fdf56fc07fdf",
+        "num": 17
+       },
+       {
+        "title": "各种热门游戏+40款模拟器",
+        "link": "https://pan.quark.cn/s/c4e73def14d4",
+        "num": 18
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "其它",
+    "children": [
+     {
+      "name": "其他",
+      "items": [
+       {
+        "title": "饥荒",
+        "link": "https://pan.quark.cn/s/04dbb5b0933c",
+        "num": 19
+       },
+       {
+        "title": "宝可梦传说 阿尔宙斯 全随机 安卓+电脑 内附金手指 0711",
+        "link": "https://pan.quark.cn/s/3b846a395a77",
+        "num": 20
+       },
+       {
+        "title": "暗黑破坏神3：终极版（手机+pc）",
+        "link": "https://pan.quark.cn/s/714c21bbdea8",
+        "num": 21
+       },
+       {
+        "title": "极限竞速：地平线6尊享版v403.798全DLC+单独升级补丁+联机补丁+完美614存档+修改器",
+        "link": "https://pan.quark.cn/s/4b7ff3885f3b",
+        "num": 22
+       },
+       {
+        "title": "红色警戒游戏合集",
+        "link": "https://pan.quark.cn/s/ccdf55be0000",
+        "num": 23
+       },
+       {
+        "title": "群星（Stellaris）",
+        "link": "https://pan.quark.cn/s/925f3d39c9c9",
+        "num": 24
+       },
+       {
+        "title": "暗黑潜水员 v0.8.0 可联机",
+        "link": "https://pan.quark.cn/s/1d5a24e516ef",
+        "num": 25
+       },
+       {
+        "title": "超市模拟器 PC+手机",
+        "link": "https://pan.quark.cn/s/518d0e196769",
+        "num": 26
+       },
+       {
+        "title": "漫蛙2",
+        "link": "https://pan.quark.cn/s/a6694d1cddc5",
+        "num": 27
+       },
+       {
+        "title": "女寝皆是修罗场（手机版）",
+        "link": "https://pan.quark.cn/s/7d454184b050",
+        "num": 28
+       },
+       {
+        "title": "死亡细胞PC+手机",
+        "link": "https://pan.quark.cn/s/9d07884d76ea",
+        "num": 29
+       },
+       {
+        "title": "养鸡模拟器 Eggstreme Farming V0.3.1",
+        "link": "https://pan.quark.cn/s/881574ddaaaa",
+        "num": 30
+       },
+       {
+        "title": "苦痛殿堂 Halls of Torment  v20241011",
+        "link": "https://pan.quark.cn/s/0100bdb825df",
+        "num": 31
+       },
+       {
+        "title": "魔法工艺 Magicraft v1.0.45",
+        "link": "https://pan.quark.cn/s/aaa0c8c45171",
+        "num": 32
+       },
+       {
+        "title": "骗子酒馆",
+        "link": "https://pan.quark.cn/s/bb06bf33a9c3",
+        "num": 33
+       },
+       {
+        "title": "我的世界：地下城 v1.17.0.0 豪华中文版 全DLC 打包XG器",
+        "link": "https://pan.quark.cn/s/e5d422c715e8",
+        "num": 34
+       },
+       {
+        "title": "星露谷物语",
+        "link": "https://pan.quark.cn/s/69b9c2b14554",
+        "num": 35
+       },
+       {
+        "title": "樱花校园模拟器＋病娇模拟器（yanderesimulator）",
+        "link": "https://pan.quark.cn/s/2c2ac117015c",
+        "num": 36
+       },
+       {
+        "title": "房屋建筑商",
+        "link": "https://pan.quark.cn/s/1c8059c446eb",
+        "num": 37
+       },
+       {
+        "title": "合金弹头进攻：重装上阵",
+        "link": "https://pan.quark.cn/s/aab78d8787d8",
+        "num": 38
+       },
+       {
+        "title": "落日余晖 IfSunSets  v0.3.4",
+        "link": "https://pan.quark.cn/s/f4a39cfa4fa6",
+        "num": 39
+       },
+       {
+        "title": "深渊学校",
+        "link": "https://pan.quark.cn/s/8e7c7451ac12",
+        "num": 40
+       },
+       {
+        "title": "无名者：屠龙v10.23",
+        "link": "https://pan.quark.cn/s/12b5d9ef3519",
+        "num": 41
+       },
+       {
+        "title": "兄弟：双子传说重制版  v0729",
+        "link": "https://pan.quark.cn/s/9a8897fafbf9",
+        "num": 42
+       },
+       {
+        "title": "灾殃The Scourge v0.3.20",
+        "link": "https://pan.quark.cn/s/368350a5d80c",
+        "num": 43
+       },
+       {
+        "title": "战国王朝v 1.0.0.5",
+        "link": "https://pan.quark.cn/s/5b1e6cd44082",
+        "num": 44
+       },
+       {
+        "title": "阴暗森林 v1.4.2",
+        "link": "https://pan.quark.cn/s/398df5b723e9",
+        "num": 45
+       },
+       {
+        "title": "超自然车旅中文版",
+        "link": "https://pan.quark.cn/s/1ef86e21e9f0",
+        "num": 46
+       },
+       {
+        "title": "费卢杰六日",
+        "link": "https://pan.quark.cn/s/dbbad97cc15f",
+        "num": 47
+       },
+       {
+        "title": "公鸡神探：深入虫巢v11.7",
+        "link": "https://pan.quark.cn/s/2cf55f31be13",
+        "num": 48
+       },
+       {
+        "title": "战锤40K：星际战士2  v4.0.0.1+ DLC 超级版",
+        "link": "https://pan.quark.cn/s/8c00893cba03",
+        "num": 49
+       },
+       {
+        "title": "艾尔登法环黄金树幽影  豪华中文+全DLC 解压即玩",
+        "link": "https://pan.quark.cn/s/64c1fa3dce5f",
+        "num": 50
+       },
+       {
+        "title": "怪物猎人 世界-冰原 v15.21.00+世界定制版",
+        "link": "https://pan.quark.cn/s/788b65a4480d",
+        "num": 51
+       },
+       {
+        "title": "虚空列车 v1.06 豪华中文版 全DLC",
+        "link": "https://pan.quark.cn/s/afa284bf8de1",
+        "num": 52
+       },
+       {
+        "title": "咖啡馆经营模拟 v0.6.8",
+        "link": "https://pan.quark.cn/s/01cbca03d877",
+        "num": 53
+       },
+       {
+        "title": "骑马与砍杀2：霸主 v1.4.5 重大更新 豪华中文版 全DLC",
+        "link": "https://pan.quark.cn/s/8ef3f21f79bf",
+        "num": 54
+       },
+       {
+        "title": "围攻 v1.90-25346",
+        "link": "https://pan.quark.cn/s/7c77734e01bc",
+        "num": 55
+       },
+       {
+        "title": "蚂蚁帝国\\_v1.04.20552 官中",
+        "link": "https://pan.quark.cn/s/3c311f350151",
+        "num": 56
+       },
+       {
+        "title": "只狼：影逝二度 豪华中文版 全DLC➕存档 非虚拟机",
+        "link": "https://pan.quark.cn/s/0037b39918fe",
+        "num": 57
+       },
+       {
+        "title": "暗黑破坏神3：永恒典藏版",
+        "link": "https://pan.quark.cn/s/6145eb660f1b",
+        "num": 58
+       },
+       {
+        "title": "霍格沃兹MOD整合包（含本体）",
+        "link": "https://pan.quark.cn/s/1e1b563fc6fe",
+        "num": 59
+       },
+       {
+        "title": "森林 v4175072",
+        "link": "https://pan.quark.cn/s/6ccda5ca0025",
+        "num": 60
+       },
+       {
+        "title": "杀戮尖塔2v0.107.1",
+        "link": "https://pan.quark.cn/s/22d834f5ba93",
+        "num": 61
+       },
+       {
+        "title": "逃离后室 逃离密室  Build.21112500 单机+联机",
+        "link": "https://pan.quark.cn/s/012df9c08ed8",
+        "num": 62
+       },
+       {
+        "title": "吸血鬼爬行者（双端）",
+        "link": "https://pan.quark.cn/s/30a8cc7f3785",
+        "backup": "https://pan.quark.cn/s/39e4f5f5318d",
+        "num": 63
+       },
+       {
+        "title": "《生灵重塑》最新版本  豪华中文版+全DLC",
+        "link": "https://pan.quark.cn/s/1910fa3b2761",
+        "num": 64
+       },
+       {
+        "title": "豪华联机全DLC 七日杀 解压即玩",
+        "link": "https://pan.quark.cn/s/efdb7f7086de",
+        "num": 65
+       },
+       {
+        "title": "群星 v4.4.1 全DLC  解压即玩",
+        "link": "https://pan.quark.cn/s/64d0530b1c04",
+        "num": 66
+       },
+       {
+        "title": "万物皆可蟹【手机+pc】",
+        "link": "https://pan.quark.cn/s/546a4336c66c",
+        "num": 67
+       },
+       {
+        "title": "孤岛惊魂游戏合集",
+        "link": "https://pan.quark.cn/s/3711bbe38fa8",
+        "num": 68
+       },
+       {
+        "title": "生化危机游戏合集",
+        "link": "https://pan.quark.cn/s/e6c22d0fe6b1",
+        "num": 69
+       },
+       {
+        "title": "尼尔机械纪元 豪华中文+全DLC+MOD清凉包",
+        "link": "https://pan.quark.cn/s/d2fca36efd3c",
+        "num": 70
+       },
+       {
+        "title": "呓语小镇 v1.2.0.8",
+        "link": "https://pan.quark.cn/s/ad55c79f358b",
+        "num": 71
+       },
+       {
+        "title": "朋友收集 梦想生活 官方中文v1.0.3+金手指",
+        "link": "https://pan.quark.cn/s/c027bdd19670",
+        "num": 72
+       },
+       {
+        "title": "斗罗大陆转盘",
+        "link": "https://pan.quark.cn/s/2a278e3f3415",
+        "num": 73
+       },
+       {
+        "title": "切尔诺贝利：模拟器",
+        "link": "https://pan.quark.cn/s/1e8207e01290",
+        "num": 74
+       },
+       {
+        "title": "余烬骑士 v2.3.1 豪华中文版 全DLC",
+        "link": "https://pan.quark.cn/s/c74975cbcba4",
+        "num": 75
+       },
+       {
+        "title": "游轮大厨",
+        "link": "https://pan.quark.cn/s/68dbb740d142",
+        "num": 76
+       },
+       {
+        "title": "死或生：维纳斯璀璨假期v1.05fix2",
+        "link": "https://pan.quark.cn/s/8157b2fd7379",
+        "num": 77
+       },
+       {
+        "title": "小小梦魇苹果安卓电脑",
+        "link": "https://pan.quark.cn/s/e966ff528282",
+        "num": 78
+       },
+       {
+        "title": "午夜轮班 v1.0.1",
+        "link": "https://pan.quark.cn/s/db69a369ac18",
+        "num": 79
+       },
+       {
+        "title": "一起来开大商场 v1.0",
+        "link": "https://pan.quark.cn/s/2b83572a246f",
+        "num": 80
+       },
+       {
+        "title": "饥荒联机版手机版",
+        "link": "https://pan.quark.cn/s/569c57f70d61",
+        "num": 81
+       },
+       {
+        "title": "木筏求生v1.1.07联机版",
+        "link": "https://pan.quark.cn/s/310ec335c692",
+        "num": 82
+       },
+       {
+        "title": "奶茶店模拟器 - 重生之我在冰堡甜城当店长（Boba Cafe Simulator）",
+        "link": "https://pan.quark.cn/s/17f18b7f56f0",
+        "num": 83
+       },
+       {
+        "title": "艾尔登法环 豪华中文版＋全DLC＋修改器支持联机",
+        "link": "https://pan.quark.cn/s/a131688e3eb0",
+        "num": 84
+       },
+       {
+        "title": "塞尔达传说 织梦岛 安卓+电脑 内附金手指",
+        "link": "https://pan.quark.cn/s/1b0ea19fca29",
+        "num": 85
+       },
+       {
+        "title": "非生物因素",
+        "link": "https://pan.quark.cn/s/2b57d5b80b19",
+        "num": 86
+       },
+       {
+        "title": "美味回转寿司店模拟器（Ugoku Sushi Bar）",
+        "link": "https://pan.quark.cn/s/17190857eab2",
+        "num": 87
+       },
+       {
+        "title": "诺兰德 v0.5588.9770.0",
+        "link": "https://pan.quark.cn/s/95700d5c034d",
+        "num": 88
+       },
+       {
+        "title": "小马模拟器",
+        "link": "https://pan.quark.cn/s/a8d843fe032a",
+        "num": 89
+       },
+       {
+        "title": "星尘轨迹：魔女之愿（STARDUST Wish of Witch）",
+        "link": "https://pan.quark.cn/s/8aeab5f20799",
+        "num": 90
+       },
+       {
+        "title": "模拟人生4v1.126.73.1030豪华中文版全DLC",
+        "link": "https://pan.quark.cn/s/c6063dfb6bb8",
+        "num": 91
+       },
+       {
+        "title": "杀戮尖塔 1",
+        "link": "https://pan.quark.cn/s/5096fe804253",
+        "num": 92
+       },
+       {
+        "title": "机械狂欢",
+        "link": "https://pan.quark.cn/s/a880a3ee489a",
+        "num": 93
+       },
+       {
+        "title": "VEIN 静脉 v0.024fix6",
+        "link": "https://pan.quark.cn/s/92e71668d463",
+        "num": 94
+       },
+       {
+        "title": "求生之路2+二次元清凉MOD解压即玩",
+        "link": "https://pan.quark.cn/s/4e19781852c0",
+        "num": 95
+       },
+       {
+        "title": "阿凡达：潘多拉边境（Avatar Frontiers of Pandora）",
+        "link": "https://pan.quark.cn/s/be32050fef18",
+        "num": 96
+       },
+       {
+        "title": "地狱超市 v2026.1.28 中文版",
+        "link": "https://pan.quark.cn/s/5cd2ef81fbef",
+        "num": 97
+       },
+       {
+        "title": "黑夜轮回（Re Night）",
+        "link": "https://pan.quark.cn/s/42ed2c80c42b",
+        "num": 98
+       },
+       {
+        "title": "完蛋我被男同学包围了游戏！（火爆全网！！）",
+        "link": "https://pan.quark.cn/s/d8c2fe02911e",
+        "num": 99
+       },
+       {
+        "title": "末日车队 v1.0.0.15 中文版",
+        "link": "https://pan.quark.cn/s/3cad5b813c3a",
+        "num": 100
+       },
+       {
+        "title": "死亡日：狂杀末路(Deadly Days：Roadtrip)\\_v0.21.4 官中",
+        "link": "https://pan.quark.cn/s/9a519038def7",
+        "num": 101
+       },
+       {
+        "title": "米加小镇无广版",
+        "link": "https://pan.quark.cn/s/fb458800adf1",
+        "num": 102
+       },
+       {
+        "title": "恐怖黎明（Grim Dawn）",
+        "link": "https://pan.quark.cn/s/797b4785ccab",
+        "num": 103
+       },
+       {
+        "title": "天天飞车单机版（可断网）🔥",
+        "link": "https://pan.quark.cn/s/9a4057bbf433",
+        "num": 104
+       },
+       {
+        "title": "锈湖·甄嬛传",
+        "link": "https://pan.quark.cn/s/664efa6b014e",
+        "num": 105
+       },
+       {
+        "title": "乐高漫威超级英雄2 v1.0.0.20065 豪华版中文版 全DLC",
+        "link": "https://pan.quark.cn/s/2ab24a379522",
+        "num": 106
+       },
+       {
+        "title": "灰域之境 解压即玩",
+        "link": "https://pan.quark.cn/s/50c3c7dcd52f",
+        "num": 107
+       },
+       {
+        "title": "魔戒：北方战争 传世版 v1.0.0.1",
+        "link": "https://pan.quark.cn/s/2ee57e7dce35",
+        "num": 108
+       },
+       {
+        "title": "沙堡（Sandcastle）",
+        "link": "https://pan.quark.cn/s/bc1ebb39e302",
+        "num": 109
+       },
+       {
+        "title": "乒乓荣耀",
+        "link": "https://pan.quark.cn/s/35cc91d39e1f",
+        "num": 110
+       },
+       {
+        "title": "圣火守望者：共筑防线  解压即玩",
+        "link": "https://pan.quark.cn/s/35cdf9cc4794",
+        "num": 111
+       },
+       {
+        "title": "掌心深空🔥🔥🔥",
+        "link": "https://pan.quark.cn/s/0712ee70625e",
+        "num": 112
+       },
+       {
+        "title": "巨击大乱斗（双端）",
+        "link": "https://pan.quark.cn/s/bf292de90e91",
+        "num": 113
+       },
+       {
+        "title": "我创造的完美球员游戏（先保存再打开）",
+        "link": "https://pan.quark.cn/s/33411d1465c7",
+        "num": 114
+       },
+       {
+        "title": "NBA 2K27",
+        "link": "https://pan.quark.cn/s/ced6ca1150f7",
+        "num": 115
+       },
+       {
+        "title": "漫威超级战争！",
+        "link": "https://pan.quark.cn/s/81c44effee40",
+        "num": 116
+       },
+       {
+        "title": "电玩大亨： 肉鸽模拟器（GameStonk Simulator）",
+        "link": "https://pan.quark.cn/s/3196e52d5df5",
+        "num": 117
+       },
+       {
+        "title": "柏青哥农场（Pachinko Farm）",
+        "link": "https://pan.quark.cn/s/df1ce9c7b066",
+        "num": 118
+       },
+       {
+        "title": "黎明行者之血",
+        "link": "https://pan.quark.cn/s/07577059453a",
+        "num": 119
+       },
+       {
+        "title": "第一狂战士 卡赞",
+        "link": "https://pan.quark.cn/s/26524b3b4f5a",
+        "num": 120
+       },
+       {
+        "title": "红色沙漠new",
+        "link": "https://pan.quark.cn/s/0b02f979ed9a",
+        "num": 121
+       },
+       {
+        "title": "龙之剑：觉醒v1.0.10",
+        "link": "https://pan.quark.cn/s/c4e701a006b7",
+        "num": 122
+       },
+       {
+        "title": "逃离塔科夫4.1.3低配高帧MOD一体整合  解压即玩+教程",
+        "link": "https://pan.quark.cn/s/6337bb4f1a3c",
+        "num": 123
+       },
+       {
+        "title": "渔力全开（How to Fish）",
+        "link": "https://pan.quark.cn/s/675ea0a731a2",
+        "num": 124
+       },
+       {
+        "title": "诛仙归来手游",
+        "link": "https://pan.quark.cn/s/2993fd9153b5",
+        "num": 125
+       },
+       {
+        "title": "女神异闻录3 豪华全DLC 非虚拟机 解压即玩",
+        "link": "https://pan.quark.cn/s/af173cb17e92",
+        "num": 126
+       },
+       {
+        "title": "城市：天际线2 v1.6.2f1",
+        "link": "https://pan.quark.cn/s/ac4729bb51c5",
+        "num": 127
+       },
+       {
+        "title": "撤离前 33 天 v0.0.0.762",
+        "link": "https://pan.quark.cn/s/f06927428fab",
+        "num": 128
+       },
+       {
+        "title": "人渣 豪华全DLC 解压即玩",
+        "link": "https://pan.quark.cn/s/f1506da51eea",
+        "num": 129
+       },
+       {
+        "title": "全面战争模拟器 v1.1.8.7 豪华中文版 全DLC",
+        "link": "https://pan.quark.cn/s/95ad5d6be0d3",
+        "num": 130
+       },
+       {
+        "title": "英灵神殿 v1.0.15",
+        "link": "https://pan.quark.cn/s/6546d757f669",
+        "num": 131
+       },
+       {
+        "title": "英雄连3：最终防线 Company of Heroes 3 Final Stand Build.24046057",
+        "link": "https://pan.quark.cn/s/2dbd10961f6a",
+        "num": 132
+       },
+       {
+        "title": "无人深空",
+        "link": "https://pan.quark.cn/s/b5ad7b940b11",
+        "num": 133
+       },
+       {
+        "title": "大海捞针模拟器（手机+pc端）",
+        "link": "https://pan.quark.cn/s/468a42feda54",
+        "num": 134
+       },
+       {
+        "title": "欢迎来到古原镇 v1.0.2",
+        "link": "https://pan.quark.cn/s/9c74111bf962",
+        "num": 135
+       },
+       {
+        "title": "方舟： 生存飞升",
+        "link": "https://pan.quark.cn/s/dd47d802c52a",
+        "num": 136
+       },
+       {
+        "title": "梦之形",
+        "link": "https://pan.quark.cn/s/ead78d962cb7",
+        "num": 137
+       },
+       {
+        "title": "地平线6 豪华中DLC➕全车辆存档➕联机 现最新版 解压即玩",
+        "link": "https://pan.quark.cn/s/081bc962fb48",
+        "num": 138
+       },
+       {
+        "title": "无人深空 联机版",
+        "link": "https://pan.quark.cn/s/3476892f7cf9",
+        "num": 139
+       },
+       {
+        "title": "邻居之家：密室逃脱 v2024.9.20 中文版",
+        "link": "https://pan.quark.cn/s/6a61b37ea077",
+        "num": 140
+       },
+       {
+        "title": "王国保卫战6：新启程",
+        "link": "https://pan.quark.cn/s/38f11310f698",
+        "num": 141
+       },
+       {
+        "title": "针影裁梦 Dressmaker v20260921",
+        "link": "https://pan.quark.cn/s/5a0285f25bd6",
+        "num": 142
+       },
+       {
+        "title": "城市天际线 v1.20.1-F1 豪华中文版 全DLC 打包XG器",
+        "link": "https://pan.quark.cn/s/7bb8bb0ce843",
+        "num": 143
+       },
+       {
+        "title": "挂灵（Bait Soul）",
+        "link": "https://pan.quark.cn/s/e52929f50330",
+        "num": 144
+       },
+       {
+        "title": "拳皇15",
+        "link": "https://pan.quark.cn/s/df5cd4066a3b",
+        "num": 145
+       },
+       {
+        "title": "超级市场模拟器 v00.02.026.006",
+        "link": "https://pan.quark.cn/s/fab47e4e53ed",
+        "num": 146
+       },
+       {
+        "title": "耻辱(1+2)",
+        "link": "https://pan.quark.cn/s/041a16e797a5",
+        "num": 147
+       },
+       {
+        "title": "超市模拟器 v1.4.2 中文 单机＋联机 打包XG器",
+        "link": "https://pan.quark.cn/s/199ff311b955",
+        "num": 148
+       },
+       {
+        "title": "东京女武神 解压即玩",
+        "link": "https://pan.quark.cn/s/c19a524f9e12",
+        "num": 149
+       },
+       {
+        "title": "地痞街道2",
+        "link": "https://pan.quark.cn/s/007d75f8fb0a",
+        "num": 150
+       },
+       {
+        "title": "达人战机：终极版 Truxton Extreme Build.23413016",
+        "link": "https://pan.quark.cn/s/122d6dee54e0",
+        "num": 151
+       },
+       {
+        "title": "多重人生 v2.1.0.2",
+        "link": "https://pan.quark.cn/s/d4b449507fbc",
+        "num": 152
+       },
+       {
+        "title": "恶仙",
+        "link": "https://pan.quark.cn/s/9d0fa0a94279",
+        "num": 153
+       },
+       {
+        "title": "方块方舟 v26.08.28",
+        "link": "https://pan.quark.cn/s/3aea2887a708",
+        "num": 154
+       },
+       {
+        "title": "剑星v1.4.1fix6（整合mod）",
+        "link": "https://pan.quark.cn/s/156b8c41c872",
+        "num": 155
+       },
+       {
+        "title": "空洞骑士豪华版+修改器+手游",
+        "link": "https://pan.quark.cn/s/0985b431e027",
+        "num": 156
+       },
+       {
+        "title": "空姐模拟器 v1.0.1 中文版",
+        "link": "https://pan.quark.cn/s/8d2777053bd7",
+        "num": 157
+       },
+       {
+        "title": "露玛岛 v1.1.11.26948",
+        "link": "https://pan.quark.cn/s/805284c5cb68",
+        "num": 158
+       },
+       {
+        "title": "沦陷",
+        "link": "https://pan.quark.cn/s/66ae3bc7d1d8",
+        "num": 159
+       },
+       {
+        "title": "边境检查官Contraband Police  25.10.14 官方简体中文",
+        "link": "https://pan.quark.cn/s/d01367b2489f",
+        "num": 160
+       },
+       {
+        "title": "boundbyinsanity被疯狂束缚",
+        "link": "https://pan.quark.cn/s/0a8256f97145",
+        "num": 161
+       },
+       {
+        "title": "刺客信条系列合集",
+        "link": "https://pan.quark.cn/s/5430abad67bc",
+        "num": 162
+       },
+       {
+        "title": "城市：天际线2v1.5.7f1 豪华中文版全DLC",
+        "link": "https://pan.quark.cn/s/d3cfc5cff00e",
+        "num": 163
+       },
+       {
+        "title": "古墓丽影合集",
+        "link": "https://pan.quark.cn/s/c6ec66fc3a86",
+        "num": 164
+       },
+       {
+        "title": "GTA5增强版+MOD整合包+教程 解压即玩",
+        "link": "https://pan.quark.cn/s/585c4258bdde",
+        "num": 165
+       },
+       {
+        "title": "红楼梦galgame（保存后打开）",
+        "link": "https://pan.quark.cn/s/4aca531e31c6",
+        "num": 166
+       },
+       {
+        "title": "幻兽帕鲁 正式版+MOD＋联机+修改器 解压即玩",
+        "link": "https://pan.quark.cn/s/e861236fc3bf",
+        "num": 167
+       },
+       {
+        "title": "jianxing MOD整合 非虚拟机v1.4.1 豪华中文版 全DLC",
+        "link": "https://pan.quark.cn/s/3fee0e903982",
+        "num": 168
+       },
+       {
+        "title": "极品飞车游戏合集",
+        "link": "https://pan.quark.cn/s/f41e4afac456",
+        "num": 169
+       },
+       {
+        "title": "僵尸毁灭工程 高配版 本体＋MOD 解压即玩",
+        "link": "https://pan.quark.cn/s/829bc86ef765",
+        "num": 170
+       },
+       {
+        "title": "60秒避难所生存 手机+PC",
+        "link": "https://pan.quark.cn/s/4baac334ac02",
+        "num": 171
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "500_素材杂烩": {
+  "title": "素材杂烩",
+  "categories": [
+   {
+    "name": "视频素材",
+    "children": [
+     {
+      "name": "景区/旅行",
+      "items": [
+       {
+        "title": "中国318个5A级景区视频讲解+185个航拍",
+        "link": "https://pan.quark.cn/s/4ac3ea46b312",
+        "num": 1
+       }
+      ]
+     },
+     {
+      "name": "绿幕/背景",
+      "items": [
+       {
+        "title": "风景无声无字幕三分屏200款10~30秒",
+        "link": "https://pan.quark.cn/s/908b0e62bc88",
+        "num": 2
+       },
+       {
+        "title": "绿幕视频素材合集",
+        "link": "https://pan.quark.cn/s/c783b64e6bd0",
+        "num": 3
+       },
+       {
+        "title": "UP主必备！B站某音热门绿幕视频素材…",
+        "link": "https://pan.quark.cn/s/1c0de2b2b659",
+        "num": 4
+       },
+       {
+        "title": "治愈系风景视频素材合集",
+        "link": "https://pan.quark.cn/s/1698e0e84883",
+        "num": 5
+       }
+      ]
+     },
+     {
+      "name": "解压/剪辑",
+      "items": [
+       {
+        "title": "5000+短视频热门解压系列视频素材",
+        "link": "https://pan.quark.cn/s/dc6f715c34c7",
+        "num": 6
+       },
+       {
+        "title": "9000+语音包——剪辑短视频必备素材",
+        "link": "https://pan.quark.cn/s/930b1becc17c",
+        "num": 7
+       },
+       {
+        "title": "短视频搞笑转场素材（经典）",
+        "link": "https://pan.quark.cn/s/79ee2bfc9601",
+        "num": 8
+       },
+       {
+        "title": "短视频剪辑配音音效库（9000＋）",
+        "link": "https://pan.quark.cn/s/952de9b57384",
+        "num": 9
+       },
+       {
+        "title": "【音效素材库】",
+        "link": "https://pan.quark.cn/s/3b6ee859ff99",
+        "num": 10
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "图片·壁纸",
+    "children": [
+     {
+      "name": "壁纸",
+      "items": [
+       {
+        "title": "ankle动态壁纸（每天更新）",
+        "link": "https://pan.quark.cn/s/57aece77f834",
+        "num": 11
+       },
+       {
+        "title": "壁纸",
+        "link": "https://pan.quark.cn/s/f7f21440127b",
+        "num": 12
+       },
+       {
+        "title": "壁纸美图",
+        "link": "https://pan.quark.cn/s/a4ff1ede3c88",
+        "num": 13
+       },
+       {
+        "title": "拉布布壁纸合集(静态+动态)",
+        "link": "https://pan.quark.cn/s/05591ec558c2",
+        "num": 14
+       },
+       {
+        "title": "像素风动态背景图",
+        "link": "https://pan.quark.cn/s/858bde092d78",
+        "num": 15
+       }
+      ]
+     },
+     {
+      "name": "表情包",
+      "items": [
+       {
+        "title": "表情包",
+        "link": "https://pan.quark.cn/s/91ad75b08c87",
+        "num": 16
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+};
+
+// flatten for search
+const allItems = [];
+for (const [topKey, top] of Object.entries(DATA)) {
+    for (const cat of top.categories) {
+        for (const child of cat.children) {
+            for (const item of child.items) {
+                allItems.push({ ...item, topKey, topName: top.title, catName: cat.name, childName: child.name });
+            }
+        }
+    }
+}
+
+// ── Top Nav ──
+const topNav = document.getElementById("topNav");
+const topMeta = {};
+let firstTopTitle = null;
+for (const [k, v] of Object.entries(DATA)) {
+    const n = v.categories.reduce((s, c) => s + c.children.reduce((s2, ch) => s2 + ch.items.length, 0), 0);
+    topMeta[v.title] = { key: k, count: n };
+    const iconMap = {"文件资料":"📁","影视音漫":"🎬","教程课程":"🎓","游戏资源":"🎮","素材杂烩":"📦"};
+    const isFirst = firstTopTitle === null;
+    const btn = document.createElement("button");
+    btn.className = "top-btn" + (isFirst ? " active" : "");
+    btn.innerHTML = `${iconMap[v.title]||"📦"} ${v.title}`;
+    btn.dataset.top = v.title;
+    topNav.appendChild(btn);
+    if (isFirst) firstTopTitle = v.title;
+}
+
+topNav.addEventListener("click", e => {
+    const btn = e.target.closest(".top-btn");
+    if (!btn || !btn.dataset.top) return;    // 「首页」外链不参与分类切换
+    topNav.querySelectorAll(".top-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    renderSubNav(btn.dataset.top);
+    render(btn.dataset.top, currentSub);
+});
+
+// ── Sub Nav ──
+let currentSub = "all";
+function renderSubNav(topId) {
+    currentSub = "all";
+    const subNav = document.getElementById("subNav");
+    subNav.innerHTML = "";
+    if (topId === "all") { subNav.style.display = "none"; return; }
+    subNav.style.display = "";
+    const top = DATA[topMeta[topId].key];
+    const allBtn = document.createElement("button");
+    allBtn.className = "sub-btn active";
+    allBtn.innerHTML = `全部 <span class="badge">${topMeta[topId].count}</span>`;
+    allBtn.dataset.sub = "all";
+    subNav.appendChild(allBtn);
+    for (const cat of top.categories) {
+        const n = cat.children.reduce((s, ch) => s + ch.items.length, 0);
+        const btn = document.createElement("button");
+        btn.className = "sub-btn";
+        btn.innerHTML = `${cat.name} <span class="badge">${n}</span>`;
+        btn.dataset.sub = cat.name;
+        subNav.appendChild(btn);
+    }
+    subNav.addEventListener("click", e => {
+        const btn = e.target.closest(".sub-btn");
+        if (!btn) return;
+        subNav.querySelectorAll(".sub-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentSub = btn.dataset.sub;
+        render(topId, currentSub);
+    });
+}
+
+// ── Render ──
+const iconMap = {"文件资料":"📁","影视音漫":"🎬","教程课程":"🎓","游戏资源":"🎮","素材杂烩":"📦"};
+const colorMap = {"文件资料":["#b45309","#fdf1e3"],"影视音漫":["#dc2626","#fef2f2"],"教程课程":["#7c3aed","#f5f3ff"],"游戏资源":["#059669","#ecfdf5"],"素材杂烩":["#0284c7","#f0f9ff"]};
+
+function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+function highlight(text, q) {
+    if (!q) return esc(text);
+    const safe = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(`(${safe})`, 'gi');
+    return esc(text).replace(re, '<span class="hl">$1</span>');
+}
+
+let searchTimer;
+const searchInput = document.getElementById("searchInput");
+searchInput.addEventListener("input", () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+        const activeTop = topNav.querySelector(".top-btn.active").dataset.top;
+        render(activeTop, currentSub);
+    }, 150);
+});
+
+function render(topId, subId) {
+    const main = document.getElementById("main");
+    const empty = document.getElementById("empty");
+    const q = searchInput.value.trim().toLowerCase();
+    main.innerHTML = "";
+    let shown = 0;
+
+    const tops = topId === "all" ? Object.entries(DATA) : [[topMeta[topId].key, DATA[topMeta[topId].key]]];
+
+    for (const [tk, tv] of tops) {
+        const cats = subId === "all" ? tv.categories : tv.categories.filter(c => c.name === subId);
+        for (const cat of cats) {
+            // collect matching items across children
+            const matchedChildren = [];
+            let catTotal = 0;
+            for (const child of cat.children) {
+                const items = child.items.filter(it => !q || it.title.toLowerCase().includes(q));
+                if (items.length) { matchedChildren.push({ ...child, items }); catTotal += items.length; }
+            }
+            if (!catTotal) continue;
+
+            const sec = document.createElement("div");
+            sec.className = "cat-section";
+            const [c, bg] = colorMap[tv.title] || ["#b45309","#fdf1e3"];
+            sec.innerHTML = `<div class="cat-heading" style="background:${bg}">
+                <div class="cat-icon" style="background:${c}15;color:${c}">${iconMap[tv.title]||"📦"}</div>
+                <h2 style="color:${c}">${esc(cat.name)}</h2>
+                <span class="cat-count">${catTotal}</span>
+            </div>`;
+
+            let catIdx = 0;
+            for (const child of matchedChildren) {
+                // 三级标题（如果该二级下有多个三级）
+                if (matchedChildren.length > 1) {
+                    sec.innerHTML += `<div class="sub-heading">${esc(child.name)}</div>`;
+                }
+                const grid = document.createElement("div");
+                grid.className = "grid";
+                for (const item of child.items) {
+                    catIdx++;
+                    const a = document.createElement("a");
+                    a.className = "item";
+                    a.href = item.link;
+                    a.target = "_blank";
+                    a.innerHTML = `<span class="item-num">${String(item.num || catIdx).padStart(3,'0')}</span>
+                        <span class="item-title" title="${esc(item.title)}">${highlight(item.title, q)}</span>
+                        ${item.backup ? `<button class="bak-btn" title="备用链接：${esc(item.backup)}" onclick="openBackup(event,'${item.backup}',this)">备</button>` : ""}
+                        <span class="item-arrow" aria-hidden="true">→</span>`;
+                    grid.appendChild(a);
+                }
+                sec.appendChild(grid);
+            }
+            main.appendChild(sec);
+            shown += catTotal;
+        }
+    }
+    empty.classList.toggle("show", shown === 0);
+}
+
+
+function openBackup(e, url, btn) {
+    e.preventDefault(); e.stopPropagation();
+    window.open(url, "_blank", "noopener");
+    btn.textContent = "✓"; btn.style.color = "#059669"; btn.style.borderColor = "#059669";
+    setTimeout(() => { btn.textContent = "备"; btn.style.color = ""; btn.style.borderColor = ""; }, 1200);
+}
+
+// ── Init ──
+render(firstTopTitle, "all");
+renderSubNav(firstTopTitle);
+
+// 动态同步导航与顶栏高度，避免顶栏/二级导航换行或多出时被下方 sticky 元素遮住
+(function syncHeights() {
+    const nav = document.querySelector(".top-nav");
+    const hdr = document.querySelector(".header");
+    if (!nav || !hdr) return;
+    const update = () => {
+        document.documentElement.style.setProperty("--nav-height", nav.offsetHeight + "px");
+        document.documentElement.style.setProperty("--header-height", hdr.offsetHeight + "px");
+    };
+    update();
+    window.addEventListener("resize", update);
+    window.addEventListener("load", update);
+    if (window.ResizeObserver) {
+        new ResizeObserver(update).observe(nav);
+        new ResizeObserver(update).observe(hdr);
+    }
+})();
+</script>
+</body>
+</html>
